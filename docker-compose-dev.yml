@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  frontend:
+    container_name: mail-dev
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+      args:
+        - REACT_APP_NAME=dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src

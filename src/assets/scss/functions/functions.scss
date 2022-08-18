@@ -1,0 +1,14 @@
+@function get-col-size($column) {
+  @if $column == 1 { @return calc((100% / 12)); }
+  @else if $column == 2 { @return calc((100% / 12) * 2); }
+  @else if $column == 3 { @return calc((100% / 12) * 3); }
+  @else if $column == 4 { @return calc((100% / 12) * 4); }
+  @else if $column == 5 { @return calc((100% / 12) * 5); }
+  @else if $column == 6 { @return calc((100% / 12) * 6); }
+  @else if $column == 7 { @return calc((100% / 12) * 7); }
+  @else if $column == 8 { @return calc((100% / 12) * 8); }
+  @else if $column == 9 { @return calc((100% / 12) * 9); }
+  @else if $column == 10 { @return calc((100% / 12) * 10); }
+  @else if $column == 11 { @return calc((100% / 12) * 11); }
+  @else if $column == 12 { @return calc((100% / 12) * 12); }
+}

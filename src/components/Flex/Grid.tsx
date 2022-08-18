@@ -5,7 +5,7 @@ import type * as Stitches from '@stitches/react';
 const gridWidthStyle = {
   '1': {
     flexGrow: 0,
-    flexBasis: '$gap',
+    flexBasis: 'calc(100% * (1 / 12))',
     width: 'calc(100% * (1 / 12))',
     maxWidth: 'calc(100% * (1 / 12))',
   },

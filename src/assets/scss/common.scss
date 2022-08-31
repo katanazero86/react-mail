@@ -1,6 +1,6 @@
 @import "mixins/mixins.scss";
 
-$gap: 8px;
+$gap: 0px;
 
 @include render-col('', $gap);
 @include responsive(sm) {

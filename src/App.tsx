@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
-import Grid from './components/Flex/Grid';
+import Row from './components/Grid/Row';
+import Item from './components/Grid/Item';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,25 +25,14 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-      <Grid container gap={1}>
-        <Grid item xs={12}>
-          1
-        </Grid>
-        <Grid item xs={6}>
-          2
-        </Grid>
-        <Grid item xs={6} sm={12}>
-          3
-        </Grid>
-        <Grid item xs={1}>
-          4
-        </Grid>
-      </Grid>
-      <div className="row">
-        <div className="col-12">1</div>
-        <div className="col-6">2</div>
-        <div className="col-6">3</div>
-      </div>
+      <Row rowGap={1} columnGap={1}>
+        <Item xs={6} gutter={1}>
+          <p>zzz</p>
+        </Item>
+        <Item xs={6} gutter={1}>
+          <p>zzz2</p>
+        </Item>
+      </Row>
     </div>
   );
 }

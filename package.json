@@ -11,7 +11,8 @@
     "serve": "npx serve -l 3000 -s dist"
   },
   "dependencies": {
-    "@stitches/react": "^1.2.8",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

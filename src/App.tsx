@@ -2,7 +2,7 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 import Row from './components/Grid/Row';
-import Item from './components/Grid/Item';
+import RowItem from './components/Grid/RowItem';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -26,12 +26,12 @@ function App() {
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
       <Row rowGap={1} columnGap={1}>
-        <Item xs={6} gutter={1}>
+        <RowItem xs gutter={1}>
           <p>zzz</p>
-        </Item>
-        <Item xs={6} gutter={1}>
+        </RowItem>
+        <RowItem xs={6} gutter={1}>
           <p>zzz2</p>
-        </Item>
+        </RowItem>
       </Row>
     </div>
   );

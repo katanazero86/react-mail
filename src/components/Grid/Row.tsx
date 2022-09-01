@@ -14,7 +14,6 @@ interface RowProps {
   children?: ReactNode;
   rowGap?: 0 | 1 | 2 | 3 | 4 | 5;
   columnGap?: 0 | 1 | 2 | 3 | 4 | 5;
-  container?: boolean;
   justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around';
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
 }

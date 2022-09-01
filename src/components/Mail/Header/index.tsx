@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import RowItem from '../Grid/RowItem';
-import Input from '../Forms/Input';
-import Row from '../Grid/Row';
+import RowItem from '../../Grid/RowItem';
+import Input from '../../Forms/Input';
+import Row from '../../Grid/Row';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 

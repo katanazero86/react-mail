@@ -1,18 +1,12 @@
 import './App.css';
-import Header from './components/Header';
+import Mail from './components/Mail';
+import MailMenu from './components/Mail/MailMenu';
 
 export default function App() {
   return (
     <div className="app">
-      <h2
-        style={{
-          fontSize: '16px',
-          marginBottom: '16px',
-        }}
-      >
-        Mail App
-      </h2>
-      <Header />
+      <MailMenu />
+      <Mail />
     </div>
   );
 }

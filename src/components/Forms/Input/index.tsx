@@ -5,8 +5,7 @@ const InputStyled = styled.input<InputProps>`
   border: none;
   background-color: rgb(246, 249, 254);
   color: #111827;
-  border-radius: 30px;
-  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: ${props => (props.rounded ? '30px' : 0)};
   width: ${props => (props.wFull ? '100%' : '200px')};
   height: 40px;
   box-sizing: border-box;
@@ -19,16 +18,16 @@ const InputStyled = styled.input<InputProps>`
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
   handleChange?(targetValue: string | number): void;
-
+  rounded?: boolean;
   wFull?: boolean;
 }
 
 export default function Input(props: InputProps | Omit<InputProps, keyof ComponentPropsWithRef<'input'>>) {
-  const { handleChange, wFull = false, ...rest } = props;
+  const { handleChange, rounded = false, wFull = false, ...rest } = props;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (handleChange) handleChange(e.target.value);
   };
 
-  return <InputStyled {...rest} wFull={wFull} onChange={onChange} />;
+  return <InputStyled {...rest} rounded={rounded} wFull={wFull} onChange={onChange} />;
 }

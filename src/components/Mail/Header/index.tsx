@@ -27,37 +27,6 @@ const HeaderStyled = styled.header`
   .pagination-arrow {
     display: flex;
     align-items: center;
-    span {
-      cursor: pointer;
-      position: relative;
-      margin: 0 6px;
-      display: flex;
-      align-items: center;
-      &::before {
-        content: '';
-        display: block;
-        opacity: 0;
-        position: absolute;
-        transition-duration: 0.15s;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        bottom: -6px;
-        left: -6px;
-        right: -6px;
-        top: -6px;
-        background: none;
-        border-radius: 50%;
-        box-sizing: border-box;
-        transform: scale(0);
-        transition-property: transform, opacity;
-      }
-      &:hover::before {
-        background-color: rgba(32, 33, 36, 0.059);
-        border: none;
-        box-shadow: none;
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
   }
 `;
 
@@ -70,7 +39,7 @@ export default function Header() {
     <HeaderStyled>
       <Row alignItems="center" justifyContent="space-between">
         <RowItem xs={6}>
-          <Input placeholder="메일 검색" value={searchMail} handleChange={handleChange} wFull />
+          <Input placeholder="메일 검색" value={searchMail} handleChange={handleChange} wFull rounded />
         </RowItem>
         <RowItem>
           <Row alignItems="center">
@@ -79,10 +48,10 @@ export default function Header() {
             </RowItem>
             <RowItem xs>
               <div className="pagination-arrow">
-                <span>
+                <span className="icon-hover">
                   <ChevronLeftIcon fontSize="small" />
                 </span>
-                <span>
+                <span className="icon-hover">
                   <ChevronRightIcon fontSize="small" />
                 </span>
               </div>

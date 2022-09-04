@@ -22,7 +22,7 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
   wFull?: boolean;
 }
 
-export default function Input(props: InputProps | Omit<InputProps, keyof ComponentPropsWithRef<'input'>>) {
+export default function Input(props: InputProps & Omit<InputProps, keyof ComponentPropsWithRef<'input'>>) {
   const { handleChange, rounded = false, wFull = false, ...rest } = props;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

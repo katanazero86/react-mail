@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ComponentPropsWithoutRef } from 'react';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import Button from '../Forms/Button';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
   background-color: rgba(0, 0, 0, 0.5);
@@ -20,24 +21,29 @@ const UlStyled = styled.ul`
   margin: 0;
   padding: 24px 0;
 `;
+const MailWriteStyled = styled.div`
+  padding: 0 12px 24px 12px;
+  margin-bottom: 24px;
+`;
 const LiStyled = styled.li`
   font-size: 14px;
   color: #111827;
   cursor: pointer;
   padding-right: 12px;
 `;
-const LiItem = styled.div`
+const LiItemStyled = styled.div`
   padding: 6px 12px;
   display: flex;
   align-items: center;
-  > a {
-    margin-left: 4px;
-    font-weight: 400;
-  }
   &:hover {
     border-radius: 0px 30px 30px 0px;
     background-color: rgba(10, 143, 220, 0.1);
   }
+`;
+const AnchorStyled = styled.a`
+  margin-left: 4px;
+  font-weight: 400;
+  height: 23px;
 `;
 
 interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
@@ -58,24 +64,20 @@ export default function Drawer(props: DrawerProps) {
   return (
     <DrawerStyled {...rest} isOpen={isOpen} onClick={onClick}>
       <UlStyled>
-        <div
-          className="divider-bottom"
-          style={{
-            padding: '12px',
-            marginBottom: '12px',
-          }}
-        >
-          <button>메일쓰기</button>
-        </div>
+        <MailWriteStyled className="divider-bottom">
+          <Button wFull outline rounded>
+            메일쓰기
+          </Button>
+        </MailWriteStyled>
         <LiStyled>
-          <LiItem>
+          <LiItemStyled>
             <MailOutlinedIcon />
-            <a>받은 편지함</a>
-          </LiItem>
-          <LiItem>
+            <AnchorStyled>받은 편지함</AnchorStyled>
+          </LiItemStyled>
+          <LiItemStyled>
             <MailOutlinedIcon />
-            <a>받은 편지함</a>
-          </LiItem>
+            <AnchorStyled>받은 편지함</AnchorStyled>
+          </LiItemStyled>
         </LiStyled>
       </UlStyled>
     </DrawerStyled>

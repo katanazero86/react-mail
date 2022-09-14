@@ -1,6 +1,10 @@
+import { ComponentPropsWithoutRef, MouseEvent } from 'react';
 import styled from '@emotion/styled';
-import { ComponentPropsWithoutRef } from 'react';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Button from '../Forms/Button';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
@@ -41,9 +45,11 @@ const LiItemStyled = styled.div`
   }
 `;
 const AnchorStyled = styled.a`
-  margin-left: 4px;
+  margin-left: 14px;
   font-weight: 400;
   height: 23px;
+  text-decoration: none;
+  color: #111827;
 `;
 
 interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
@@ -55,14 +61,21 @@ interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
 export default function Drawer(props: DrawerProps) {
   const { isOpen, handleClose, ...rest } = props;
 
-  const onClick = () => {
+  const onClose = () => {
     if (handleClose) {
       handleClose();
     }
   };
 
+  const handleAnchorClick = (e: MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { path } = e.currentTarget.dataset as { path: string };
+    console.log(path);
+  };
+
   return (
-    <DrawerStyled {...rest} isOpen={isOpen} onClick={onClick}>
+    <DrawerStyled {...rest} isOpen={isOpen} onClick={onClose}>
       <UlStyled>
         <MailWriteStyled className="divider-bottom">
           <Button wFull outline rounded>
@@ -70,13 +83,25 @@ export default function Drawer(props: DrawerProps) {
           </Button>
         </MailWriteStyled>
         <LiStyled>
-          <LiItemStyled>
+          <LiItemStyled onClick={handleAnchorClick} data-path="inbox">
             <MailOutlinedIcon />
-            <AnchorStyled>받은 편지함</AnchorStyled>
+            <AnchorStyled href="#">받은 편지함</AnchorStyled>
           </LiItemStyled>
-          <LiItemStyled>
-            <MailOutlinedIcon />
-            <AnchorStyled>받은 편지함</AnchorStyled>
+          <LiItemStyled onClick={handleAnchorClick} data-path="sent">
+            <SendOutlinedIcon />
+            <AnchorStyled href="">보낸 편지함</AnchorStyled>
+          </LiItemStyled>
+          <LiItemStyled onClick={handleAnchorClick} data-path="starred">
+            <StarBorderOutlinedIcon />
+            <AnchorStyled href="">별표 편지함</AnchorStyled>
+          </LiItemStyled>
+          <LiItemStyled onClick={handleAnchorClick} data-path="spam">
+            <InfoOutlinedIcon />
+            <AnchorStyled href="">스팸함</AnchorStyled>
+          </LiItemStyled>
+          <LiItemStyled onClick={handleAnchorClick} data-path="trash">
+            <DeleteOutlineOutlinedIcon />
+            <AnchorStyled href="">휴지통</AnchorStyled>
           </LiItemStyled>
         </LiStyled>
       </UlStyled>

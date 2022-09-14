@@ -14,7 +14,7 @@ const HeaderStyled = styled.header`
   box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   padding: 12px 8px;
 
   .pagination-info {

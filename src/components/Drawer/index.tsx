@@ -5,7 +5,9 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import Button from '../Forms/Button';
+import Label from '../Icons/Label';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
   background-color: rgba(0, 0, 0, 0.5);
@@ -40,7 +42,7 @@ const LiItemStyled = styled.div`
   display: flex;
   align-items: center;
   &:hover {
-    border-radius: 0px 30px 30px 0px;
+    border-radius: 0 30px 30px 0;
     background-color: rgba(10, 143, 220, 0.1);
   }
 `;
@@ -50,6 +52,34 @@ const AnchorStyled = styled.a`
   height: 23px;
   text-decoration: none;
   color: #111827;
+`;
+const LabelsStyled = styled.div`
+  padding: 12px;
+`;
+const LabelsHeaderStyled = styled.div`
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const LabelsBodyStyled = styled.ul`
+  padding: 12px 0;
+  margin: 0;
+`;
+const LabelsItemStyled = styled.li`
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+`;
+const LabelsItemText = styled.p`
+  letter-spacing: -0.2px;
+  padding-left: 14px;
+  font-size: 14px;
+  height: 22px;
+  display: flex;
+  align-items: center;
 `;
 
 interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
@@ -72,6 +102,10 @@ export default function Drawer(props: DrawerProps) {
     e.stopPropagation();
     const { path } = e.currentTarget.dataset as { path: string };
     console.log(path);
+  };
+
+  const handleLabelAddClick = (e: MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
   };
 
   return (
@@ -104,6 +138,24 @@ export default function Drawer(props: DrawerProps) {
             <AnchorStyled href="">휴지통</AnchorStyled>
           </LiItemStyled>
         </LiStyled>
+        <LabelsStyled>
+          <LabelsHeaderStyled>
+            <h4>Labels</h4>
+            <span className="icon-hover" onClick={handleLabelAddClick}>
+              <AddIcon />
+            </span>
+          </LabelsHeaderStyled>
+          <LabelsBodyStyled>
+            <LabelsItemStyled>
+              <Label color="red" />
+              <LabelsItemText>Velog</LabelsItemText>
+            </LabelsItemStyled>
+            <LabelsItemStyled>
+              <Label color="skyblue" />
+              <LabelsItemText>test</LabelsItemText>
+            </LabelsItemStyled>
+          </LabelsBodyStyled>
+        </LabelsStyled>
       </UlStyled>
     </DrawerStyled>
   );

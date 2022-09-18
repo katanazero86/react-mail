@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, MouseEvent } from 'react';
+import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
@@ -8,6 +8,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import AddIcon from '@mui/icons-material/Add';
 import Button from '../Forms/Button';
 import Label from '../Icons/Label';
+import ComposeMailModal from '../Modals/ComposeMailModal';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
   background-color: rgba(0, 0, 0, 0.5);
@@ -108,55 +109,88 @@ export default function Drawer(props: DrawerProps) {
     e.stopPropagation();
   };
 
+  const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
+  const handleComposeMailClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsComposeMailOpen(true);
+  };
+  const closeComposeMailModal = () => {
+    setIsComposeMailOpen(false);
+  };
+
+  const [labels, setLabels] = useState<typeof labelsDummy>([]);
+  useEffect(() => {
+    if (isOpen) {
+      // TODO : labels fetch
+      setLabels([...labelsDummy]);
+    }
+  }, [isOpen]);
+
   return (
-    <DrawerStyled {...rest} isOpen={isOpen} onClick={onClose}>
-      <UlStyled>
-        <MailWriteStyled className="divider-bottom">
-          <Button wFull outline rounded>
-            메일쓰기
-          </Button>
-        </MailWriteStyled>
-        <LiStyled>
-          <LiItemStyled onClick={handleAnchorClick} data-path="inbox">
-            <MailOutlinedIcon />
-            <AnchorStyled href="#">받은 편지함</AnchorStyled>
-          </LiItemStyled>
-          <LiItemStyled onClick={handleAnchorClick} data-path="sent">
-            <SendOutlinedIcon />
-            <AnchorStyled href="">보낸 편지함</AnchorStyled>
-          </LiItemStyled>
-          <LiItemStyled onClick={handleAnchorClick} data-path="starred">
-            <StarBorderOutlinedIcon />
-            <AnchorStyled href="">별표 편지함</AnchorStyled>
-          </LiItemStyled>
-          <LiItemStyled onClick={handleAnchorClick} data-path="spam">
-            <InfoOutlinedIcon />
-            <AnchorStyled href="">스팸함</AnchorStyled>
-          </LiItemStyled>
-          <LiItemStyled onClick={handleAnchorClick} data-path="trash">
-            <DeleteOutlineOutlinedIcon />
-            <AnchorStyled href="">휴지통</AnchorStyled>
-          </LiItemStyled>
-        </LiStyled>
-        <LabelsStyled>
-          <LabelsHeaderStyled>
-            <h4>Labels</h4>
-            <span className="icon-hover" onClick={handleLabelAddClick}>
-              <AddIcon />
-            </span>
-          </LabelsHeaderStyled>
-          <LabelsBodyStyled>
-            <LabelsItemStyled>
-              <Label color="red" />
-              <LabelsItemText>Velog</LabelsItemText>
-            </LabelsItemStyled>
-            <LabelsItemStyled>
-              <Label color="skyblue" />
-              <LabelsItemText>test</LabelsItemText>
-            </LabelsItemStyled>
-          </LabelsBodyStyled>
-        </LabelsStyled>
-      </UlStyled>
-    </DrawerStyled>
+    <>
+      <DrawerStyled {...rest} isOpen={isOpen} onClick={onClose}>
+        <UlStyled>
+          <MailWriteStyled className="divider-bottom">
+            <Button wFull outline rounded onClick={handleComposeMailClick}>
+              메일쓰기
+            </Button>
+          </MailWriteStyled>
+          <LiStyled>
+            <LiItemStyled onClick={handleAnchorClick} data-path="inbox">
+              <MailOutlinedIcon />
+              <AnchorStyled href="#">받은 편지함</AnchorStyled>
+            </LiItemStyled>
+            <LiItemStyled onClick={handleAnchorClick} data-path="sent">
+              <SendOutlinedIcon />
+              <AnchorStyled href="">보낸 편지함</AnchorStyled>
+            </LiItemStyled>
+            <LiItemStyled onClick={handleAnchorClick} data-path="starred">
+              <StarBorderOutlinedIcon />
+              <AnchorStyled href="">별표 편지함</AnchorStyled>
+            </LiItemStyled>
+            <LiItemStyled onClick={handleAnchorClick} data-path="spam">
+              <InfoOutlinedIcon />
+              <AnchorStyled href="">스팸함</AnchorStyled>
+            </LiItemStyled>
+            <LiItemStyled onClick={handleAnchorClick} data-path="trash">
+              <DeleteOutlineOutlinedIcon />
+              <AnchorStyled href="">휴지통</AnchorStyled>
+            </LiItemStyled>
+          </LiStyled>
+          <LabelsStyled>
+            <LabelsHeaderStyled>
+              <h4>Labels</h4>
+              <span className="icon-hover" onClick={handleLabelAddClick}>
+                <AddIcon />
+              </span>
+            </LabelsHeaderStyled>
+            <LabelsBodyStyled>
+              {labels.length > 0 &&
+                labels.map(label => (
+                  <LabelsItemStyled key={label.id}>
+                    <Label color={label.color} />
+                    <LabelsItemText>{label.name}</LabelsItemText>
+                  </LabelsItemStyled>
+                ))}
+            </LabelsBodyStyled>
+          </LabelsStyled>
+        </UlStyled>
+      </DrawerStyled>
+      <ComposeMailModal isOpen={isComposeMailOpen} onClose={closeComposeMailModal} />
+    </>
   );
 }
+
+// Dummy
+const labelsDummy = [
+  {
+    id: 'label01',
+    name: 'Velog',
+    color: 'red',
+  },
+  {
+    id: 'label02',
+    name: 'Test',
+    color: 'skyblue',
+  },
+];

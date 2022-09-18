@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, ReactNode, MouseEvent } from 'react';
 import styled from '@emotion/styled';
 
 const ButtonStyled = styled.button<Partial<ButtonProps>>`
@@ -59,13 +59,13 @@ interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   rounded?: boolean;
   outline?: boolean;
   variant?: 'primary' | 'secondary';
-  handleClick?(): void;
+  onClick?(e: MouseEvent<HTMLButtonElement>): void;
 }
 
 export default function Button(props: ButtonProps & Omit<ButtonProps, keyof ComponentPropsWithoutRef<'button'>>) {
-  const { children, wFull, rounded, outline, variant = 'primary', handleClick, ...rest } = props;
+  const { children, wFull, rounded, outline, variant = 'primary', onClick, ...rest } = props;
   return (
-    <ButtonStyled {...rest} variant={variant} wFull={wFull} rounded={rounded} outline={outline}>
+    <ButtonStyled {...rest} variant={variant} wFull={wFull} rounded={rounded} outline={outline} onClick={onClick}>
       {children}
     </ButtonStyled>
   );

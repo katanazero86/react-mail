@@ -1,4 +1,4 @@
-import { ChangeEvent, ComponentPropsWithRef } from 'react';
+import { KeyboardEvent, ChangeEvent, ComponentPropsWithRef } from 'react';
 import styled from '@emotion/styled';
 
 const InputStyled = styled.input<InputProps>`
@@ -17,17 +17,14 @@ const InputStyled = styled.input<InputProps>`
 `;
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
-  handleChange?(targetValue: string | number): void;
+  onKeyDown?(e: KeyboardEvent<HTMLInputElement>): void;
+  onChange?(e: ChangeEvent<HTMLInputElement>): void;
   rounded?: boolean;
   wFull?: boolean;
 }
 
 export default function Input(props: InputProps & Omit<InputProps, keyof ComponentPropsWithRef<'input'>>) {
-  const { handleChange, rounded = false, wFull = false, ...rest } = props;
+  const { onKeyDown = () => null, onChange = () => null, rounded = false, wFull = false, ...rest } = props;
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (handleChange) handleChange(e.target.value);
-  };
-
-  return <InputStyled {...rest} rounded={rounded} wFull={wFull} onChange={onChange} />;
+  return <InputStyled {...rest} rounded={rounded} wFull={wFull} onKeyDown={onKeyDown} onChange={onChange} />;
 }

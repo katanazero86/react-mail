@@ -1,10 +1,10 @@
-import { KeyboardEvent, ChangeEvent, MouseEvent, useState } from 'react';
-import styled from '@emotion/styled';
+import { KeyboardEvent, ChangeEvent, MouseEvent, useState, useEffect } from 'react';
 import Row from '../../Grid/Row';
 import RowItem from '../../Grid/RowItem';
 import Input from '../../Forms/Input';
 import Textarea from '../../Forms/Textarea';
 import {
+  FormLabel,
   ModalActionsStyled,
   ModalBodyStyled,
   ModalHeaderStyled,
@@ -15,19 +15,24 @@ import {
 import Close from '../../Icons/Close';
 import Button from '../../Forms/Button';
 
-const FormLabel = styled.p`
-  color: #777;
-  font-size: 13px;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
-`;
-
 interface ComposeMailModalProps {
   isOpen: boolean;
   onClose(): void;
 }
 
 export default function ComposeMailModal({ isOpen, onClose }: ComposeMailModalProps) {
+  useEffect(() => {
+    if (!isOpen) {
+      setMailForm({
+        recipient: '',
+        cc: '',
+        bcc: '',
+        title: '',
+        contents: '',
+      });
+    }
+  }, [isOpen]);
+
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (e.target === e.currentTarget) {
@@ -37,7 +42,9 @@ export default function ComposeMailModal({ isOpen, onClose }: ComposeMailModalPr
 
   const handleCloseClick = (e: MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
-    onClose();
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
   const [mailForm, setMailForm] = useState({
@@ -58,9 +65,7 @@ export default function ComposeMailModal({ isOpen, onClose }: ComposeMailModalPr
     }));
   };
 
-  const handleSendClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-
+  const handleSendClick = () => {
     const mailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (mailForm.recipient === '') {
       alert('받는 사람 이메일 주소를 입력해주세요.');

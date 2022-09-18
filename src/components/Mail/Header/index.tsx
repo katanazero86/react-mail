@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import styled from '@emotion/styled';
 import RowItem from '../../Grid/RowItem';
 import Input from '../../Forms/Input';
 import Row from '../../Grid/Row';
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -32,21 +33,30 @@ const HeaderStyled = styled.header`
 
 export default function Header() {
   const [searchMail, setSearchMail] = useState<string | number>('');
-  const handleChange = (targetValue: string | number) => {
-    setSearchMail(targetValue);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchMail(e.target.value.trim());
   };
   return (
     <HeaderStyled>
-      <Row alignItems="center" justifyContent="space-between">
-        <RowItem xs={6}>
-          <Input placeholder="메일 검색" value={searchMail} handleChange={handleChange} wFull rounded />
-        </RowItem>
-        <RowItem>
-          <Row alignItems="center">
+      <Row alignItems="center" justifyContent="space-between" rowGap={1}>
+        <RowItem xs={12} sm={6}>
+          <Row alignItems="center" columnGap={1}>
             <RowItem xs>
+              <Input placeholder="메일 검색" value={searchMail} onChange={handleChange} wFull rounded />
+            </RowItem>
+            <RowItem>
+              <span className="icon-hover">
+                <MoreVertOutlinedIcon />
+              </span>
+            </RowItem>
+          </Row>
+        </RowItem>
+        <RowItem xs={12} sm={6}>
+          <Row alignItems="center" justifyContent="flex-end">
+            <RowItem>
               <p className="pagination-info">30개 중 1-10</p>
             </RowItem>
-            <RowItem xs>
+            <RowItem>
               <div className="pagination-arrow">
                 <span className="icon-hover">
                   <ChevronLeftIcon fontSize="small" />

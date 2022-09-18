@@ -1,5 +1,6 @@
 import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import { v4 as uuidv4 } from 'uuid';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
@@ -9,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '../Forms/Button';
 import Label from '../Icons/Label';
 import ComposeMailModal from '../Modals/ComposeMailModal';
+import LabelModal from '../Modals/LabelModal';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
   background-color: rgba(0, 0, 0, 0.5);
@@ -73,6 +75,11 @@ const LabelsItemStyled = styled.li`
   margin: 0;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  &:hover {
+    border-radius: 0 30px 30px 0;
+    background-color: rgba(10, 143, 220, 0.1);
+  }
 `;
 const LabelsItemText = styled.p`
   letter-spacing: -0.2px;
@@ -105,12 +112,8 @@ export default function Drawer(props: DrawerProps) {
     console.log(path);
   };
 
-  const handleLabelAddClick = (e: MouseEvent<HTMLSpanElement>) => {
-    e.stopPropagation();
-  };
-
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
-  const handleComposeMailClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const openComposeMailModal = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsComposeMailOpen(true);
   };
@@ -118,6 +121,16 @@ export default function Drawer(props: DrawerProps) {
     setIsComposeMailOpen(false);
   };
 
+  const [isLabelOpen, setIsLabelOpen] = useState(false);
+  const openLabelModal = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsLabelOpen(true);
+  };
+  const closeLabelModal = () => {
+    setIsLabelOpen(false);
+  };
+
+  const [editLabel, setEditLabel] = useState({ isEdit: false, targetLabel: undefined });
   const [labels, setLabels] = useState<typeof labelsDummy>([]);
   useEffect(() => {
     if (isOpen) {
@@ -125,13 +138,33 @@ export default function Drawer(props: DrawerProps) {
       setLabels([...labelsDummy]);
     }
   }, [isOpen]);
+  const createLabel = (targetLabel: any) => {
+    // TODO : create label fetch
+    targetLabel.id = uuidv4();
+    setLabels([...labels, targetLabel]);
+    setIsLabelOpen(false);
+  };
+  const updateLabel = (targetLabel: any) => {
+    // TODO : update label fetch
+    const labelsCopy = [...labels];
+    const index = labelsCopy.findIndex(label => label.id === targetLabel.id)!;
+    if (index !== -1) {
+      labelsCopy[index] = {
+        ...labelsCopy[index],
+        name: targetLabel.name,
+        color: targetLabel.color,
+      };
+      setLabels([...labelsCopy]);
+      setIsLabelOpen(false);
+    }
+  };
 
   return (
     <>
       <DrawerStyled {...rest} isOpen={isOpen} onClick={onClose}>
         <UlStyled>
           <MailWriteStyled className="divider-bottom">
-            <Button wFull outline rounded onClick={handleComposeMailClick}>
+            <Button wFull outline rounded onClick={openComposeMailModal}>
               메일쓰기
             </Button>
           </MailWriteStyled>
@@ -160,7 +193,7 @@ export default function Drawer(props: DrawerProps) {
           <LabelsStyled>
             <LabelsHeaderStyled>
               <h4>Labels</h4>
-              <span className="icon-hover" onClick={handleLabelAddClick}>
+              <span className="icon-hover" onClick={openLabelModal}>
                 <AddIcon />
               </span>
             </LabelsHeaderStyled>
@@ -177,6 +210,13 @@ export default function Drawer(props: DrawerProps) {
         </UlStyled>
       </DrawerStyled>
       <ComposeMailModal isOpen={isComposeMailOpen} onClose={closeComposeMailModal} />
+      <LabelModal
+        isOpen={isLabelOpen}
+        onClose={closeLabelModal}
+        isEdit={editLabel.isEdit}
+        targetLabel={editLabel.targetLabel}
+        onConfirm={editLabel.isEdit ? updateLabel : createLabel}
+      />
     </>
   );
 }
@@ -186,11 +226,11 @@ const labelsDummy = [
   {
     id: 'label01',
     name: 'Velog',
-    color: 'red',
+    color: '#e7e7e7',
   },
   {
     id: 'label02',
     name: 'Test',
-    color: 'skyblue',
+    color: '#b6cff5',
   },
 ];

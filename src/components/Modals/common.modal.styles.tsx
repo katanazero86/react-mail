@@ -13,9 +13,10 @@ export const ModalOverlayStyled = styled.div`
   right: 0;
 `;
 
-export const ModalWrapStyled = styled.div`
+export const ModalWrapStyled = styled.div<{ height?: number }>`
   width: 600px;
-  height: 550px;
+  max-height: ${props => props.height ?? '550'}px;
+  min-height: ${props => props.height ?? '550'}px;
   background-color: #ffffff;
   color: #111827;
   position: relative;
@@ -63,4 +64,12 @@ export const ModalActionsStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+  gap: 0 8px;
+`;
+
+export const FormLabel = styled.p`
+  color: #777;
+  font-size: 13px;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
 `;

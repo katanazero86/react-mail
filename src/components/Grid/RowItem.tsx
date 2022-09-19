@@ -5,7 +5,7 @@ import { mq } from '../GlobalStyle';
 const RowItemStyled = styled.div<ItemProps>(props => {
   const getItemStyleObj = (targetBp: ItemColType | boolean, targetGutter: GutterType) => {
     if (targetBp !== undefined) {
-      if (targetBp === true) return { flexGrow: 1 };
+      if (targetBp === true) return { flexGrow: 1, minWidth: 0 };
       if (targetBp >= 1 && targetBp <= 12) {
         if (targetGutter !== undefined && targetGutter !== 0) {
           return {
@@ -13,6 +13,7 @@ const RowItemStyled = styled.div<ItemProps>(props => {
             flexBasis: `calc((100% * (${targetBp} / 12)) - (${targetGutter * 8}px / 2))`,
             width: `calc((100% * (${targetBp} / 12)) - (${targetGutter * 8}px / 2))`,
             maxWidth: `calc((100% * (${targetBp} / 12)) - (${targetGutter * 8}px / 2))`,
+            minWidth: 0,
           };
         }
         return {
@@ -20,6 +21,7 @@ const RowItemStyled = styled.div<ItemProps>(props => {
           flexBasis: `calc(100% * (${targetBp} / 12))`,
           width: `calc(100% * (${targetBp} / 12))`,
           maxWidth: `calc(100% * (${targetBp} / 12))`,
+          minWidth: 0,
         };
       }
     }

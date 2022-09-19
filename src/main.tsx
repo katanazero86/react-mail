@@ -4,10 +4,13 @@ import App from './App';
 import './index.css';
 import './assets/scss/common.scss';
 import GlobalStyle from './components/GlobalStyle';
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <GlobalStyle />
-    <App />
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
   </React.StrictMode>
 );

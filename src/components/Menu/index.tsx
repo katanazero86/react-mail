@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { MouseEvent, ReactNode, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 const MenuWrapStyled = styled.div<Partial<MenuProps>>`
@@ -7,6 +7,7 @@ const MenuWrapStyled = styled.div<Partial<MenuProps>>`
   left: 8px;
   right: 8px;
   top: 16px;
+  bottom: 16px;
   display: ${props => (props.isOpen ? 'flex' : 'none')};
 `;
 
@@ -16,6 +17,9 @@ const MenuStyled = styled.ul<{ top: number; left: number }>`
   padding: 8px 0px;
   position: relative;
   outline: 0px;
+  height: fit-content;
+  max-height: 250px;
+  overflow: auto;
   width: 175px;
   background-color: #ffffff;
   border-radius: 4px;
@@ -43,17 +47,22 @@ export default function Menu({ isOpen, anchorEl, onClose, children }: MenuProps)
   useEffect(() => {
     if (isOpen) {
       if (anchorEl) {
-        console.log(anchorEl.getBoundingClientRect());
         updatePosition();
         window.addEventListener('resize', updatePosition);
       }
+      document.body.style.overflow = 'hidden';
     } else {
       window.removeEventListener('resize', updatePosition);
+      document.body.style.overflow = 'auto';
     }
   }, [isOpen]);
 
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
   return (
-    <MenuWrapStyled isOpen={isOpen}>
+    <MenuWrapStyled isOpen={isOpen} onClick={handleClick}>
       <MenuStyled top={top} left={left}>
         {children}
       </MenuStyled>

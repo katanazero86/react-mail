@@ -6,12 +6,22 @@ const MenuItemStyled = styled.li`
   white-space: nowrap;
   cursor: pointer;
   font-weight: 400;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+
+  &:hover {
+    font-weight: 500;
+  }
 `;
 
 interface MenuItemProps {
+  onClick(): void;
   children: ReactNode;
 }
 
-export default function MenuItem({ children }: MenuItemProps) {
-  return <MenuItemStyled>{children}</MenuItemStyled>;
+export default function MenuItem({ onClick, children }: MenuItemProps) {
+  const handleClick = () => {
+    if (onClick) onClick();
+  };
+  return <MenuItemStyled onClick={handleClick}>{children}</MenuItemStyled>;
 }

@@ -1,4 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { allCheckedAtom } from '../../../store/mail/index';
 import styled from '@emotion/styled';
 import RowItem from '../../Grid/RowItem';
 import Input from '../../Forms/Input';
@@ -8,6 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Menu from '../../Menu';
 import MenuItem from '../../Menu/MenuItem';
+import Checkbox from '../../Forms/Checkbox';
 
 const HeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -33,6 +36,8 @@ const HeaderStyled = styled.header`
   }
 `;
 
+type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
+
 export default function Header() {
   const [searchMail, setSearchMail] = useState<string | number>('');
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +46,6 @@ export default function Header() {
 
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
   const handleMoreClick = (e: MouseEvent<HTMLSpanElement>) => {
-    // console.log(e.target, e.currentTarget);
     if (e.currentTarget instanceof HTMLSpanElement) setAnchorEl(e.currentTarget);
   };
   const handleMenuClose = () => {
@@ -49,11 +53,33 @@ export default function Header() {
   };
   const isMenuOpen = Boolean(anchorEl);
 
+  const handleMenuItemClick = (flag: FlagType) => {
+    switch (flag) {
+      case 'ALL_READ':
+        break;
+      case 'ALL_UNREAD':
+        break;
+      case 'ALL_STAR':
+        break;
+      case 'ALL_UN_STAR':
+        break;
+    }
+    handleMenuClose();
+  };
+
+  const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAllChecked(e.target.checked);
+  };
+
   return (
     <HeaderStyled>
       <Row alignItems="center" justifyContent="space-between" rowGap={1}>
         <RowItem xs={12} sm={6}>
           <Row alignItems="center" columnGap={1}>
+            <RowItem>
+              <Checkbox onChange={handleCheckboxChange} checked={allChecked} />
+            </RowItem>
             <RowItem xs>
               <Input placeholder="메일 검색" value={searchMail} onChange={handleChange} wFull rounded />
             </RowItem>
@@ -62,7 +88,10 @@ export default function Header() {
                 <MoreVertOutlinedIcon />
               </span>
               <Menu isOpen={isMenuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
-                <MenuItem>test</MenuItem>
+                <MenuItem onClick={() => handleMenuItemClick('ALL_READ')}>모두 읽은 상태로 표시</MenuItem>
+                <MenuItem onClick={() => handleMenuItemClick('ALL_UNREAD')}>모두 안읽은 상태로 표시</MenuItem>
+                <MenuItem onClick={() => handleMenuItemClick('ALL_STAR')}>모두 별표 표시</MenuItem>
+                <MenuItem onClick={() => handleMenuItemClick('ALL_UN_STAR')}>모두 별표 제거</MenuItem>
               </Menu>
             </RowItem>
           </Row>

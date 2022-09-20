@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { allCheckedAtom } from '../../../store/mail/index';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { allCheckedAtom, mailListAtom } from '../../../store/mail/index';
 import styled from '@emotion/styled';
 import RowItem from '../../Grid/RowItem';
 import Input from '../../Forms/Input';
@@ -39,7 +39,7 @@ const HeaderStyled = styled.header`
 type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
 
 export default function Header() {
-  const [searchMail, setSearchMail] = useState<string | number>('');
+  const [searchMail, setSearchMail] = useState('');
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchMail(e.target.value.trim());
   };
@@ -53,15 +53,48 @@ export default function Header() {
   };
   const isMenuOpen = Boolean(anchorEl);
 
+  const [mailList, setMailList] = useRecoilState(mailListAtom);
   const handleMenuItemClick = (flag: FlagType) => {
     switch (flag) {
       case 'ALL_READ':
+        setMailList(
+          mailList.map(mail => {
+            return {
+              ...mail,
+              isRead: true,
+            };
+          })
+        );
         break;
       case 'ALL_UNREAD':
+        setMailList(
+          mailList.map(mail => {
+            return {
+              ...mail,
+              isRead: false,
+            };
+          })
+        );
         break;
       case 'ALL_STAR':
+        setMailList(
+          mailList.map(mail => {
+            return {
+              ...mail,
+              isStar: true,
+            };
+          })
+        );
         break;
       case 'ALL_UN_STAR':
+        setMailList(
+          mailList.map(mail => {
+            return {
+              ...mail,
+              isStar: false,
+            };
+          })
+        );
         break;
     }
     handleMenuClose();
@@ -99,7 +132,7 @@ export default function Header() {
         <RowItem xs={12} sm={6}>
           <Row alignItems="center" justifyContent="flex-end">
             <RowItem>
-              <p className="pagination-info">30개 중 1-10</p>
+              <p className="pagination-info">5개 중 1-10</p>
             </RowItem>
             <RowItem>
               <div className="pagination-arrow">

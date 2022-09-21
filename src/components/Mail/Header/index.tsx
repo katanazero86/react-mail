@@ -12,6 +12,7 @@ import Menu from '../../Menu';
 import MenuItem from '../../Menu/MenuItem';
 import Checkbox from '../../Forms/Checkbox';
 import Label from '../../Icons/Label';
+import { useParams } from 'react-router-dom';
 
 const HeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -38,9 +39,10 @@ const HeaderStyled = styled.header`
 `;
 
 type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
-type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'DELETE';
+type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
 
 export default function Header() {
+  const { mailBox } = useParams();
   const [searchMail, setSearchMail] = useState('');
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchMail(e.target.value.trim());
@@ -168,6 +170,19 @@ export default function Header() {
           })
         );
         break;
+      case 'UN_SPAM':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isSpam: false,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
       case 'DELETE':
         setMailList(
           mailList.map(mail => {
@@ -219,6 +234,7 @@ export default function Header() {
                     <MenuItem onClick={() => handleMenuItemClick('STAR')}>별표 표시</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('UN_STAR')}>별표 제거</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('SPAM')}>스팸 처리</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('SPAM')}>스팸 해제</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('DELETE')}>삭제</MenuItem>
                   </>
                 ) : (

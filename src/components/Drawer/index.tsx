@@ -1,5 +1,7 @@
 import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { checkedMailAtom } from '../../store/mail';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
@@ -101,6 +103,7 @@ interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
 
 export default function Drawer(props: DrawerProps) {
   const navigate = useNavigate();
+  const checkedMail = useSetRecoilState(checkedMailAtom);
   const { mailBox } = useParams();
   const { isOpen, handleClose, ...rest } = props;
 
@@ -114,6 +117,7 @@ export default function Drawer(props: DrawerProps) {
     e.preventDefault();
     e.stopPropagation();
     const { path } = e.currentTarget.dataset as { path: string };
+    checkedMail([]);
     navigate(`/mail/${path}`);
   };
 

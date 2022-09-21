@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { Mail } from './types';
 
 export const allCheckedAtom = atom({
   key: 'ALL_CHECKED_ATOM',
@@ -10,7 +11,7 @@ export const checkedMailAtom = atom<string[]>({
   default: [],
 });
 
-export const mailListAtom = atom({
+export const mailListAtom = atom<Mail[]>({
   key: 'MAIL_LIST_ATOM',
   default: [
     {
@@ -23,6 +24,8 @@ export const mailListAtom = atom({
       date: '2022.09.16',
       isRead: false,
       isStar: false,
+      isSpam: false,
+      isDelete: false,
     },
     {
       id: 2,
@@ -34,6 +37,8 @@ export const mailListAtom = atom({
       date: '2022.09.16',
       isRead: false,
       isStar: false,
+      isSpam: false,
+      isDelete: false,
     },
     {
       id: 3,
@@ -45,6 +50,8 @@ export const mailListAtom = atom({
       date: '2022.09.16',
       isRead: false,
       isStar: false,
+      isSpam: false,
+      isDelete: false,
     },
     {
       id: 4,
@@ -56,6 +63,8 @@ export const mailListAtom = atom({
       date: '2022.09.03',
       isRead: false,
       isStar: false,
+      isSpam: false,
+      isDelete: false,
     },
     {
       id: 5,
@@ -67,6 +76,34 @@ export const mailListAtom = atom({
       date: '2022.09.01',
       isRead: false,
       isStar: false,
+      isSpam: false,
+      isDelete: false,
+    },
+    {
+      id: 6,
+      from: 'Github',
+      fromAddress: 'no-reply@github.com',
+      title: "The evolution of the command line and more stories from GitHub's The ReadME Project",
+      contents: '깃헙에서 뭔가 메일이 왔어요 블라블라블라',
+      labelId: null,
+      date: '2022.08.30',
+      isRead: true,
+      isStar: true,
+      isSpam: false,
+      isDelete: false,
+    },
+    {
+      id: 7,
+      from: '더 시에나CC',
+      fromAddress: 'duriwayo@hanmail.net',
+      title: '(광고) 더 시에나cc (7성급리조트 분양)',
+      contents: '제주에 상륙한 이탈리아의 품격!!',
+      labelId: null,
+      date: '2022.08.29',
+      isRead: false,
+      isStar: false,
+      isSpam: true,
+      isDelete: false,
     },
   ],
 });

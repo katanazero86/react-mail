@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { allCheckedAtom, mailListAtom } from '../../../store/mail/index';
+import { allCheckedAtom, checkedMailAtom, mailListAtom } from '../../../store/mail/index';
 import styled from '@emotion/styled';
 import RowItem from '../../Grid/RowItem';
 import Input from '../../Forms/Input';
@@ -11,6 +11,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Menu from '../../Menu';
 import MenuItem from '../../Menu/MenuItem';
 import Checkbox from '../../Forms/Checkbox';
+import Label from '../../Icons/Label';
 
 const HeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -37,6 +38,7 @@ const HeaderStyled = styled.header`
 `;
 
 type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
+type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'DELETE';
 
 export default function Header() {
   const [searchMail, setSearchMail] = useState('');
@@ -54,7 +56,12 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
 
   const [mailList, setMailList] = useRecoilState(mailListAtom);
-  const handleMenuItemClick = (flag: FlagType) => {
+  const checkedMail = useRecoilValue(checkedMailAtom);
+  const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAllChecked(e.target.checked);
+  };
+  const handleMenuItemClick = (flag: FlagType | CheckedFlagType) => {
     switch (flag) {
       case 'ALL_READ':
         setMailList(
@@ -96,13 +103,86 @@ export default function Header() {
           })
         );
         break;
+      case 'READ':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isRead: true,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
+      case 'UNREAD':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isRead: false,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
+      case 'STAR':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isStar: true,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
+      case 'UN_STAR':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isStar: false,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
+      case 'SPAM':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isSpam: true,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
+      case 'DELETE':
+        setMailList(
+          mailList.map(mail => {
+            if (checkedMail.includes(String(mail.id))) {
+              return {
+                ...mail,
+                isDelete: true,
+              };
+            }
+            return mail;
+          })
+        );
+        break;
     }
     handleMenuClose();
-  };
-
-  const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAllChecked(e.target.checked);
   };
 
   return (
@@ -117,14 +197,38 @@ export default function Header() {
               <Input placeholder="메일 검색" value={searchMail} onChange={handleChange} wFull rounded />
             </RowItem>
             <RowItem>
-              <span className="icon-hover" onClick={handleMoreClick}>
-                <MoreVertOutlinedIcon />
-              </span>
+              <Row alignItems="center">
+                {checkedMail.length > 0 && (
+                  <RowItem>
+                    <span className="icon-hover" onClick={handleMoreClick}>
+                      <Label />
+                    </span>
+                  </RowItem>
+                )}
+                <RowItem>
+                  <span className="icon-hover" onClick={handleMoreClick}>
+                    <MoreVertOutlinedIcon />
+                  </span>
+                </RowItem>
+              </Row>
               <Menu isOpen={isMenuOpen} anchorEl={anchorEl} onClose={handleMenuClose}>
-                <MenuItem onClick={() => handleMenuItemClick('ALL_READ')}>모두 읽은 상태로 표시</MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('ALL_UNREAD')}>모두 안읽은 상태로 표시</MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('ALL_STAR')}>모두 별표 표시</MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('ALL_UN_STAR')}>모두 별표 제거</MenuItem>
+                {checkedMail.length > 0 ? (
+                  <>
+                    <MenuItem onClick={() => handleMenuItemClick('READ')}>읽은 상태로 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('UNREAD')}>안읽은 상태로 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('STAR')}>별표 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('UN_STAR')}>별표 제거</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('SPAM')}>스팸 처리</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('DELETE')}>삭제</MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem onClick={() => handleMenuItemClick('ALL_READ')}>모두 읽은 상태로 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('ALL_UNREAD')}>모두 안읽은 상태로 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('ALL_STAR')}>모두 별표 표시</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('ALL_UN_STAR')}>모두 별표 제거</MenuItem>
+                  </>
+                )}
               </Menu>
             </RowItem>
           </Row>
@@ -132,7 +236,7 @@ export default function Header() {
         <RowItem xs={12} sm={6}>
           <Row alignItems="center" justifyContent="flex-end">
             <RowItem>
-              <p className="pagination-info">5개 중 1-10</p>
+              <p className="pagination-info">6개 중 1-10</p>
             </RowItem>
             <RowItem>
               <div className="pagination-arrow">

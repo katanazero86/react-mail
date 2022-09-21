@@ -1,4 +1,5 @@
 import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
@@ -40,21 +41,23 @@ const LiStyled = styled.li`
   cursor: pointer;
   padding-right: 12px;
 `;
-const LiItemStyled = styled.div`
+const LiItemStyled = styled.div<{ active?: boolean }>`
   padding: 6px 12px;
   display: flex;
   align-items: center;
+  border-radius: 0 30px 30px 0;
+  background-color: ${props => (props.active ? 'rgba(10, 143, 220, 0.1)' : 'transparent')};
+  font-weight: ${props => (props.active ? 500 : 400)};
   &:hover {
-    border-radius: 0 30px 30px 0;
     background-color: rgba(10, 143, 220, 0.1);
   }
 `;
 const AnchorStyled = styled.a`
   margin-left: 14px;
-  font-weight: 400;
   height: 23px;
   text-decoration: none;
   color: #111827;
+  font-weight: inherit;
 `;
 const LabelsStyled = styled.div`
   padding: 12px;
@@ -76,8 +79,8 @@ const LabelsItemStyled = styled.li`
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-radius: 0 30px 30px 0;
   &:hover {
-    border-radius: 0 30px 30px 0;
     background-color: rgba(10, 143, 220, 0.1);
   }
 `;
@@ -97,6 +100,8 @@ interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
 }
 
 export default function Drawer(props: DrawerProps) {
+  const navigate = useNavigate();
+  const { mailBox } = useParams();
   const { isOpen, handleClose, ...rest } = props;
 
   const onClose = () => {
@@ -109,7 +114,7 @@ export default function Drawer(props: DrawerProps) {
     e.preventDefault();
     e.stopPropagation();
     const { path } = e.currentTarget.dataset as { path: string };
-    console.log(path);
+    navigate(`/mail/${path}`);
   };
 
   const [isComposeMailOpen, setIsComposeMailOpen] = useState(false);
@@ -169,23 +174,23 @@ export default function Drawer(props: DrawerProps) {
             </Button>
           </MailWriteStyled>
           <LiStyled>
-            <LiItemStyled onClick={handleAnchorClick} data-path="inbox">
+            <LiItemStyled onClick={handleAnchorClick} data-path="inbox" active={mailBox === 'inbox'}>
               <MailOutlinedIcon />
               <AnchorStyled href="#">받은 편지함</AnchorStyled>
             </LiItemStyled>
-            <LiItemStyled onClick={handleAnchorClick} data-path="sent">
+            <LiItemStyled onClick={handleAnchorClick} data-path="sent" active={mailBox === 'sent'}>
               <SendOutlinedIcon />
               <AnchorStyled href="">보낸 편지함</AnchorStyled>
             </LiItemStyled>
-            <LiItemStyled onClick={handleAnchorClick} data-path="starred">
+            <LiItemStyled onClick={handleAnchorClick} data-path="starred" active={mailBox === 'starred'}>
               <StarBorderOutlinedIcon />
               <AnchorStyled href="">별표 편지함</AnchorStyled>
             </LiItemStyled>
-            <LiItemStyled onClick={handleAnchorClick} data-path="spam">
+            <LiItemStyled onClick={handleAnchorClick} data-path="spam" active={mailBox === 'spam'}>
               <InfoOutlinedIcon />
               <AnchorStyled href="">스팸함</AnchorStyled>
             </LiItemStyled>
-            <LiItemStyled onClick={handleAnchorClick} data-path="trash">
+            <LiItemStyled onClick={handleAnchorClick} data-path="trash" active={mailBox === 'trash'}>
               <DeleteOutlineOutlinedIcon />
               <AnchorStyled href="">휴지통</AnchorStyled>
             </LiItemStyled>

@@ -1,12 +1,13 @@
-import './App.css';
-import Mail from './components/Mail';
-import MailMenu from './components/Mail/MailMenu';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import MailPage from './pages/MailPage';
 
 export default function App() {
   return (
-    <div className="app">
-      <MailMenu />
-      <Mail />
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="mail/inbox" replace />} />
+      <Route path="/mail">
+        <Route path=":mailBox" element={<MailPage />} />
+      </Route>
+    </Routes>
   );
 }

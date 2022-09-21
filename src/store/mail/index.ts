@@ -137,7 +137,7 @@ export const filteredMailListAtom = selector({
         });
       case 'starred':
         return mailList.filter(mail => {
-          if (mail.isStar) {
+          if (mail.isStar && !mail.isDelete) {
             return true;
           } else {
             return false;
@@ -145,7 +145,7 @@ export const filteredMailListAtom = selector({
         });
       case 'spam':
         return mailList.filter(mail => {
-          if (mail.isSpam) {
+          if (mail.isSpam && !mail.isDelete) {
             return true;
           } else {
             return false;
@@ -159,6 +159,56 @@ export const filteredMailListAtom = selector({
             return false;
           }
         });
+    }
+  },
+});
+
+export const filteredMailLengthAtom = selector({
+  key: 'FILTERED_MAIL_LENGTH_ATOM',
+  get: ({ get }) => {
+    const filter = get(mailListFilterAtom);
+    const mailList = get(mailListAtom);
+    switch (filter) {
+      case 'inbox':
+        return mailList.filter(mail => {
+          if (!mail.isSpam && !mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
+      case 'sent':
+        return mailList.filter(mail => {
+          if (mail.isStar) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
+      case 'starred':
+        return mailList.filter(mail => {
+          if (mail.isStar && !mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
+      case 'spam':
+        return mailList.filter(mail => {
+          if (mail.isSpam && !mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
+      case 'trash':
+        return mailList.filter(mail => {
+          if (mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
     }
   },
 });

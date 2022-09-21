@@ -1,14 +1,20 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { allCheckedAtom, checkedMailAtom, mailListAtom } from '../../../store/mail';
-import { Mail } from '../../../store/mail/types';
+import { ChangeEvent, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  allCheckedAtom,
+  checkedMailAtom,
+  filteredMailListAtom,
+  mailListAtom,
+  mailListFilterAtom,
+} from '../../../store/mail';
+import { Mail, MailFilterType } from '../../../store/mail/types';
 import styled from '@emotion/styled';
 import Checkbox from '../../Forms/Checkbox';
 import Row from '../../Grid/Row';
 import RowItem from '../../Grid/RowItem';
 import OutlineStar from '../../Icons/OutlineStar';
 import Star from '../../Icons/Star';
-import { useParams } from 'react-router-dom';
 
 const BodyStyled = styled.section`
   flex-grow: 1;
@@ -78,58 +84,15 @@ const MailContentsStyled = styled.p`
 
 export default function Body() {
   const { mailBox } = useParams();
-  const [resultMailList, setResultMailList] = useState<Mail[]>([]);
+  const filteredMailList = useRecoilValue(filteredMailListAtom);
+  const setMailListFilter = useSetRecoilState(mailListFilterAtom);
   const [mailList, setMailList] = useRecoilState(mailListAtom);
   const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
   const [checkedMail, setCheckedMail] = useRecoilState(checkedMailAtom);
 
   useEffect(() => {
-    switch (mailBox) {
-      case 'starred':
-        setResultMailList(
-          mailList.filter(mail => {
-            if (mail.isStar) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-        );
-        break;
-      case 'spam':
-        setResultMailList(
-          mailList.filter(mail => {
-            if (mail.isSpam) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-        );
-        break;
-      case 'trash':
-        setResultMailList(
-          mailList.filter(mail => {
-            if (mail.isDelete) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-        );
-        break;
-      default:
-        setResultMailList(
-          mailList.filter(mail => {
-            if (!mail.isSpam && !mail.isDelete) {
-              return true;
-            } else {
-              return false;
-            }
-          })
-        );
-    }
-  }, [mailBox, mailList]);
+    setMailListFilter(current => mailBox as MailFilterType);
+  }, [mailBox]);
 
   useEffect(() => {
     if (allChecked) {
@@ -176,11 +139,11 @@ export default function Body() {
 
   return (
     <BodyStyled>
-      {resultMailList.length === 0 && <EmptyContentsStyled>메일이 존재하지 않습니다.</EmptyContentsStyled>}
+      {filteredMailList.length === 0 && <EmptyContentsStyled>메일이 존재하지 않습니다.</EmptyContentsStyled>}
 
       <div>
-        {resultMailList.length > 0 &&
-          resultMailList.map(mail => {
+        {filteredMailList.length > 0 &&
+          filteredMailList.map(mail => {
             return (
               <MailWrapStyled key={mail.id}>
                 <Row alignItems="center" justifyContent="space-between">

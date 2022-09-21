@@ -11,3 +11,5 @@ export interface Mail {
   isSpam: boolean;
   isDelete: boolean;
 }
+
+export type MailFilterType = 'inbox' | 'sent' | 'starred' | 'spam' | 'trash';

@@ -1,5 +1,5 @@
-import { atom } from 'recoil';
-import { Mail } from './types';
+import { atom, selector } from 'recoil';
+import { Mail, MailFilterType } from './types';
 
 export const allCheckedAtom = atom({
   key: 'ALL_CHECKED_ATOM',
@@ -9,6 +9,11 @@ export const allCheckedAtom = atom({
 export const checkedMailAtom = atom<string[]>({
   key: 'CHECKED_MAIL_ATOM',
   default: [],
+});
+
+export const mailListFilterAtom = atom<MailFilterType>({
+  key: 'MAIL_LIST_FILTER_ATOM',
+  default: 'inbox',
 });
 
 export const mailListAtom = atom<Mail[]>({
@@ -106,4 +111,54 @@ export const mailListAtom = atom<Mail[]>({
       isDelete: false,
     },
   ],
+});
+
+export const filteredMailListAtom = selector({
+  key: 'FILTERED_MAIL_LIST_ATOM',
+  get: ({ get }) => {
+    const filter = get(mailListFilterAtom);
+    const mailList = get(mailListAtom);
+    switch (filter) {
+      case 'inbox':
+        return mailList.filter(mail => {
+          if (!mail.isSpam && !mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      case 'sent':
+        return mailList.filter(mail => {
+          if (mail.isStar) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      case 'starred':
+        return mailList.filter(mail => {
+          if (mail.isStar) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      case 'spam':
+        return mailList.filter(mail => {
+          if (mail.isSpam) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      case 'trash':
+        return mailList.filter(mail => {
+          if (mail.isDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+    }
+  },
 });

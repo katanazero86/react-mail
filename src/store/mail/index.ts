@@ -1,6 +1,11 @@
 import { atom, selector } from 'recoil';
 import { Mail, MailFilterType } from './types';
 
+export const searchMailTextAtom = atom({
+  key: 'SEARCH_MAIL_TEXT_ATOM',
+  default: '',
+});
+
 export const allCheckedAtom = atom({
   key: 'ALL_CHECKED_ATOM',
   default: false,
@@ -51,7 +56,7 @@ export const mailListAtom = atom<Mail[]>({
       fromAddress: 'notify@velog.io',
       title: 'Re: React 에서 볼 수 있는 클로저(Closure) | 댓글 알림',
       contents: `It's Postman's biggest update in almost a year. Here's what's new:`,
-      labelId: null,
+      labelId: 'label01',
       date: '2022.09.16',
       isRead: false,
       isStar: false,
@@ -133,47 +138,68 @@ export const filteredMailListAtom = selector({
   get: ({ get }) => {
     const filter = get(mailListFilterAtom);
     const mailList = get(mailListAtom);
+    const searchText = get(searchMailTextAtom);
+
+    const searchFilter = (filteredMail: Mail) => {
+      if (
+        filteredMail.title.toLowerCase().includes(searchText.toLowerCase()) ||
+        filteredMail.contents.toLowerCase().includes(searchText.toLowerCase())
+      )
+        return true;
+      return false;
+    };
+
     switch (filter) {
       case 'inbox':
-        return mailList.filter(mail => {
-          if (!mail.isSpam && !mail.isDelete) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return mailList
+          .filter(mail => {
+            if (!mail.isSpam && !mail.isDelete) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .filter(searchFilter);
       case 'sent':
-        return mailList.filter(mail => {
-          if (mail.isStar) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return mailList
+          .filter(mail => {
+            if (mail.isStar) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .filter(searchFilter);
       case 'starred':
-        return mailList.filter(mail => {
-          if (mail.isStar && !mail.isDelete) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return mailList
+          .filter(mail => {
+            if (mail.isStar && !mail.isDelete) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .filter(searchFilter);
       case 'spam':
-        return mailList.filter(mail => {
-          if (mail.isSpam && !mail.isDelete) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return mailList
+          .filter(mail => {
+            if (mail.isSpam && !mail.isDelete) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .filter(searchFilter);
       case 'trash':
-        return mailList.filter(mail => {
-          if (mail.isDelete) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return mailList
+          .filter(mail => {
+            if (mail.isDelete) {
+              return true;
+            } else {
+              return false;
+            }
+          })
+          .filter(searchFilter);
     }
   },
 });
@@ -225,5 +251,30 @@ export const filteredMailLengthAtom = selector({
           }
         }).length;
     }
+  },
+});
+
+export const labelsAtom = atom({
+  key: 'LABELS_ATOM',
+  default: [
+    {
+      id: 'label01',
+      name: 'Velog',
+      color: '#e7e7e7',
+    },
+    {
+      id: 'label02',
+      name: 'Test',
+      color: '#b6cff5',
+    },
+  ],
+});
+
+export const getLabels = selector({
+  key: 'GET_LABELS',
+  get: ({ get }) => {
+    // TODO : labels fetch
+    const labels = get(labelsAtom);
+    return labels;
   },
 });

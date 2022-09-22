@@ -1,7 +1,7 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { mailListAtom } from '../../../../store/mail';
+import { getLabels, mailListAtom } from '../../../../store/mail';
 import styled from '@emotion/styled';
 import Row from '../../../Grid/Row';
 import RowItem from '../../../Grid/RowItem';
@@ -10,6 +10,7 @@ import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import MenuItem from '../../../Menu/MenuItem';
 import Menu from '../../../Menu';
 import ComposeMailModal from '../../../Modals/ComposeMailModal';
+import Label from '../../../Icons/Label';
 
 const DetailBodyStyled = styled.section`
   flex-grow: 1;
@@ -20,6 +21,11 @@ const DetailBodyStyled = styled.section`
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-top: none;
   border-radius: 0 0 8px 8px;
+`;
+
+const MailLabelWrapStyled = styled.div`
+  padding-top: 20px;
+  padding-left: 20px;
 `;
 
 const MailTitleStyled = styled.h2`
@@ -82,6 +88,7 @@ const MailForm = styled.div`
 
 export default function DetailBody() {
   const { mailId } = useParams();
+  const labels = useRecoilValue(getLabels);
   const mailList = useRecoilValue(mailListAtom);
 
   // TODO : targetMail fetch & Read
@@ -129,7 +136,18 @@ export default function DetailBody() {
     <>
       <DetailBodyStyled>
         <div>
-          <MailTitleStyled>{targetMail.title}</MailTitleStyled>
+          <Row alignItems="center" noWrap>
+            {targetMail.labelId !== null && (
+              <RowItem>
+                <MailLabelWrapStyled>
+                  <Label color={labels.find(label => label.id === targetMail.labelId)!.color} />
+                </MailLabelWrapStyled>
+              </RowItem>
+            )}
+            <RowItem>
+              <MailTitleStyled>{targetMail.title}</MailTitleStyled>
+            </RowItem>
+          </Row>
           <MailFromAndToWrapStyled>
             <Row alignItems="center">
               <RowItem xs={12}>
@@ -152,7 +170,7 @@ export default function DetailBody() {
             </Row>
           </MailFromAndToWrapStyled>
           <MailActions>
-            <span className="icon-hover">
+            <span className="icon-hover" onClick={() => handleMenuItemClick('REPLY')}>
               <ReplyIcon />
             </span>
             <span className="icon-hover" onClick={handleMoreClick}>

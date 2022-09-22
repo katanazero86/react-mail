@@ -4,7 +4,7 @@ export interface Mail {
   fromAddress: string;
   title: string;
   contents: string;
-  labelId: null;
+  labelId: null | string;
   date: string;
   isRead: boolean;
   isStar: boolean;

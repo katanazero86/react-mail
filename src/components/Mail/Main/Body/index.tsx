@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   allCheckedAtom,
   checkedMailAtom,
   filteredMailListAtom,
+  getLabels,
   mailListAtom,
   mailListFilterAtom,
 } from '../../../../store/mail';
@@ -15,6 +16,7 @@ import Row from '../../../Grid/Row';
 import RowItem from '../../../Grid/RowItem';
 import OutlineStar from '../../../Icons/OutlineStar';
 import Star from '../../../Icons/Star';
+import Label from '../../../Icons/Label';
 
 const MainBodyStyled = styled.section`
   flex-grow: 1;
@@ -88,6 +90,7 @@ const MailContentsStyled = styled.p`
 export default function MainBody() {
   const navigate = useNavigate();
   const { mailBox } = useParams();
+  const labels = useRecoilValue(getLabels);
   const filteredMailList = useRecoilValue(filteredMailListAtom);
   const [mailListFilter, setMailListFilter] = useRecoilState(mailListFilterAtom);
   const [mailList, setMailList] = useRecoilState(mailListAtom);
@@ -111,10 +114,14 @@ export default function MainBody() {
   }, [allChecked]);
 
   useEffect(() => {
-    if (checkedMail.length === filteredMailList.length) {
-      setAllChecked(true);
-    } else {
+    if (checkedMail.length === 0) {
       setAllChecked(false);
+    } else {
+      if (checkedMail.length === filteredMailList.length) {
+        setAllChecked(true);
+      } else {
+        setAllChecked(false);
+      }
     }
   }, [checkedMail.length]);
 
@@ -183,9 +190,12 @@ export default function MainBody() {
                     </MailTitleStyled>
                   </RowItem>
                 </Row>
-                <Row alignItems="center">
-                  <RowItem xs>
+                <Row alignItems="center" justifyContent="space-between">
+                  <RowItem xs={10}>
                     <MailContentsStyled onClick={() => handleMailClick(mail)}>{mail.contents}</MailContentsStyled>
+                  </RowItem>
+                  <RowItem>
+                    {mail.labelId !== null && <Label color={labels.find(label => label.id === mail.labelId)!.color} />}
                   </RowItem>
                 </Row>
               </MailWrapStyled>

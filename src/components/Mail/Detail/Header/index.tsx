@@ -1,20 +1,18 @@
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { mailListAtom } from '../../../../store/mail';
 import styled from '@emotion/styled';
 import RowItem from '../../../Grid/RowItem';
 import Row from '../../../Grid/Row';
+import Label from '../../../Icons/Label';
+import OutlineStar from '../../../Icons/OutlineStar';
+import Star from '../../../Icons/Star';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
-import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import Menu from '../../../Menu';
-import MenuItem from '../../../Menu/MenuItem';
-import Checkbox from '../../../Forms/Checkbox';
-import Label from '../../../Icons/Label';
-import OutlineStar from '../../../Icons/OutlineStar';
-import { useNavigate, useParams } from 'react-router-dom';
+import LabelMenu from '../../LabelMenu';
 
 const DetailHeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -28,14 +26,27 @@ const DetailHeaderStyled = styled.header`
   padding: 12px 8px;
 `;
 
-type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
-type CheckedFlagType = 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
-
 const iconColor = { color: '#5f6368' };
 
 export default function DetailHeader() {
-  const { mailId } = useParams();
   const navigate = useNavigate();
+  const { mailId } = useParams();
+  const [mailList, setMailList] = useRecoilState(mailListAtom);
+  const targetMail = mailList.find(mail => String(mail.id) === mailId)!;
+
+  useEffect(() => {
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            isRead: true,
+          };
+        }
+        return mail;
+      })
+    );
+  }, []);
 
   const handleBackClick = () => {
     navigate(-1);
@@ -43,14 +54,79 @@ export default function DetailHeader() {
 
   const handleSpamClick = () => {
     // TODO : mail spam fetch
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            isSpam: true,
+          };
+        }
+        return mail;
+      })
+    );
+    handleBackClick();
   };
 
   const handleDeleteClick = () => {
     // TODO : mail delete fetch
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            isDelete: true,
+          };
+        }
+        return mail;
+      })
+    );
+    handleBackClick();
   };
 
   const handleUnReadClick = () => {
     // TODO : mail unread fetch
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            isRead: false,
+          };
+        }
+        return mail;
+      })
+    );
+    handleBackClick();
+  };
+
+  const handleStarClick = () => {
+    // TODO : mail star fetch
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            isStar: !mail.isStar,
+          };
+        }
+        return mail;
+      })
+    );
+  };
+
+  const handleLabelClick = (labelId: string) => {
+    setMailList(
+      mailList.map(mail => {
+        if (targetMail.id === mail.id) {
+          return {
+            ...mail,
+            labelId: labelId,
+          };
+        }
+        return mail;
+      })
+    );
   };
 
   return (
@@ -64,28 +140,26 @@ export default function DetailHeader() {
               </span>
             </RowItem>
             <RowItem>
-              <span className="icon-hover">
-                <InfoOutlinedIcon sx={iconColor} onClick={handleSpamClick} />
+              <span className="icon-hover" onClick={handleSpamClick}>
+                <InfoOutlinedIcon sx={iconColor} />
               </span>
             </RowItem>
             <RowItem>
-              <span className="icon-hover">
-                <DeleteOutlineOutlinedIcon sx={iconColor} onClick={handleDeleteClick} />
+              <span className="icon-hover" onClick={handleDeleteClick}>
+                <DeleteOutlineOutlinedIcon sx={iconColor} />
               </span>
             </RowItem>
             <RowItem>
-              <span className="icon-hover">
-                <MarkAsUnreadOutlinedIcon sx={iconColor} onClick={handleUnReadClick} />
+              <span className="icon-hover" onClick={handleUnReadClick}>
+                <MarkAsUnreadOutlinedIcon sx={iconColor} />
               </span>
             </RowItem>
             <RowItem>
-              <span className="icon-hover">
-                <Label color={iconColor.color} />
-              </span>
+              <LabelMenu color={iconColor.color} onClick={handleLabelClick} />
             </RowItem>
             <RowItem>
-              <span className="icon-hover">
-                <OutlineStar color={iconColor.color} />
+              <span className="icon-hover" onClick={handleStarClick}>
+                {targetMail.isStar ? <Star color="red" /> : <OutlineStar color={iconColor.color} />}
               </span>
             </RowItem>
           </Row>

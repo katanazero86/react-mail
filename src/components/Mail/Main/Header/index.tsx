@@ -4,8 +4,10 @@ import {
   allCheckedAtom,
   checkedMailAtom,
   filteredMailLengthAtom,
+  getLabels,
   mailListAtom,
   mailListFilterAtom,
+  searchMailTextAtom,
 } from '../../../../store/mail';
 import styled from '@emotion/styled';
 import RowItem from '../../../Grid/RowItem';
@@ -19,6 +21,7 @@ import Menu from '../../../Menu';
 import MenuItem from '../../../Menu/MenuItem';
 import Checkbox from '../../../Forms/Checkbox';
 import Label from '../../../Icons/Label';
+import LabelMenu from '../../LabelMenu';
 
 const HeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -48,9 +51,34 @@ type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
 type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
 
 export default function MainHeader() {
-  const [searchMail, setSearchMail] = useState('');
+  const labels = useRecoilValue(getLabels);
+
+  const [searchMailText, setSearchMailText] = useRecoilState(searchMailTextAtom);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchMail(e.target.value.trim());
+    setSearchMailText(e.target.value.trim());
+  };
+
+  const [labelAnchorEl, setLabelAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const handleLabelIconClick = (e: MouseEvent<HTMLSpanElement>) => {
+    if (e.currentTarget instanceof HTMLSpanElement) setLabelAnchorEl(e.currentTarget);
+  };
+  const isLabelMenuOpen = Boolean(labelAnchorEl);
+  const handleLabelMenuClose = () => {
+    setLabelAnchorEl(null);
+  };
+  const handleLabelClick = (labelId: string) => {
+    setMailList(
+      mailList.map(mail => {
+        if (checkedMail.includes(String(mail.id))) {
+          return {
+            ...mail,
+            labelId: labelId,
+          };
+        }
+        return mail;
+      })
+    );
+    setCheckedMail([]);
   };
 
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
@@ -64,7 +92,7 @@ export default function MainHeader() {
 
   const mailListFilter = useRecoilValue(mailListFilterAtom);
   const filteredMailLength = useRecoilValue(filteredMailLengthAtom);
-  const checkedMail = useRecoilValue(checkedMailAtom);
+  const [checkedMail, setCheckedMail] = useRecoilState(checkedMailAtom);
   const [mailList, setMailList] = useRecoilState(mailListAtom);
   const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -176,6 +204,7 @@ export default function MainHeader() {
             return mail;
           })
         );
+        setCheckedMail([]);
         break;
       case 'UN_SPAM':
         setMailList(
@@ -189,6 +218,7 @@ export default function MainHeader() {
             return mail;
           })
         );
+        setCheckedMail([]);
         break;
       case 'DELETE':
         setMailList(
@@ -202,6 +232,7 @@ export default function MainHeader() {
             return mail;
           })
         );
+        setCheckedMail([]);
         break;
     }
     handleMenuClose();
@@ -216,19 +247,20 @@ export default function MainHeader() {
     ) {
       // TODO : fetch delete mail
       setMailList(mailList.filter(mail => !checkedMail.includes(String(mail.id))));
+      setCheckedMail([]);
     }
   };
 
   return (
     <HeaderStyled>
       <Row alignItems="center" justifyContent="space-between" rowGap={1}>
-        <RowItem xs={12} sm={6}>
+        <RowItem xs={12} sm={7}>
           <Row alignItems="center" columnGap={1}>
             <RowItem>
               <Checkbox onChange={handleCheckboxChange} checked={allChecked} />
             </RowItem>
-            <RowItem xs>
-              <Input placeholder="메일 검색" value={searchMail} onChange={handleChange} wFull rounded />
+            <RowItem>
+              <Input placeholder="메일 검색" value={searchMailText} onChange={handleChange} rounded />
             </RowItem>
             <RowItem>
               <Row alignItems="center">
@@ -241,9 +273,7 @@ export default function MainHeader() {
                 )}
                 {checkedMail.length > 0 && mailListFilter !== 'trash' && (
                   <RowItem>
-                    <span className="icon-hover" onClick={handleMoreClick}>
-                      <Label />
-                    </span>
+                    <LabelMenu onClick={handleLabelClick} />
                   </RowItem>
                 )}
                 <RowItem>
@@ -275,7 +305,7 @@ export default function MainHeader() {
             </RowItem>
           </Row>
         </RowItem>
-        <RowItem xs={12} sm={6}>
+        <RowItem xs={12} sm={5}>
           <Row alignItems="center" justifyContent="flex-end">
             <RowItem>
               <p className="pagination-info">{filteredMailLength}개 중 1-10</p>

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 const RowStyled = styled.div<RowProps>`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: ${props => (props.noWrap ? 'row nowrap' : 'row wrap')};
   gap: ${props => props.rowGap !== undefined && props.rowGap * 8}px
     ${props => props.columnGap !== undefined && props.columnGap * 8}px;
   justify-content: ${props => props.justifyContent};
@@ -11,6 +11,7 @@ const RowStyled = styled.div<RowProps>`
 `;
 
 interface RowProps {
+  noWrap?: boolean;
   children?: ReactNode;
   rowGap?: 0 | 1 | 2 | 3 | 4 | 5;
   columnGap?: 0 | 1 | 2 | 3 | 4 | 5;
@@ -18,9 +19,15 @@ interface RowProps {
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch' | 'baseline';
 }
 
-export default function Row({ children, rowGap = 0, columnGap = 0, justifyContent, alignItems }: RowProps) {
+export default function Row({ noWrap, children, rowGap = 0, columnGap = 0, justifyContent, alignItems }: RowProps) {
   return (
-    <RowStyled rowGap={rowGap} columnGap={columnGap} justifyContent={justifyContent} alignItems={alignItems}>
+    <RowStyled
+      noWrap={noWrap}
+      rowGap={rowGap}
+      columnGap={columnGap}
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+    >
       {children}
     </RowStyled>
   );

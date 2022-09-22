@@ -109,8 +109,6 @@ export default function LabelModal({ isOpen, onClose, isEdit, targetLabel = unde
       return false;
     }
 
-    console.log('zzz');
-
     onConfirm({ ...labelForm });
   };
 

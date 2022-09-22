@@ -1,19 +1,19 @@
 import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { checkedMailAtom } from '../../store/mail';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { checkedMailAtom, getLabels, labelsAtom } from '../../store/mail';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
+import Button from '../Forms/Button';
+import Label from '../Icons/Label';
+import ComposeMailModal from '../Modals/ComposeMailModal';
+import LabelModal from '../Modals/LabelModal';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddIcon from '@mui/icons-material/Add';
-import Button from '../Forms/Button';
-import Label from '../Icons/Label';
-import ComposeMailModal from '../Modals/ComposeMailModal';
-import LabelModal from '../Modals/LabelModal';
 
 const DrawerStyled = styled.nav<Partial<DrawerProps>>`
   background-color: rgba(0, 0, 0, 0.5);
@@ -140,13 +140,8 @@ export default function Drawer(props: DrawerProps) {
   };
 
   const [editLabel, setEditLabel] = useState({ isEdit: false, targetLabel: undefined });
-  const [labels, setLabels] = useState<typeof labelsDummy>([]);
-  useEffect(() => {
-    if (isOpen) {
-      // TODO : labels fetch
-      setLabels([...labelsDummy]);
-    }
-  }, [isOpen]);
+  const setLabels = useSetRecoilState(labelsAtom);
+  const labels = useRecoilValue(getLabels);
   const createLabel = (targetLabel: any) => {
     // TODO : create label fetch
     targetLabel.id = uuidv4();
@@ -229,17 +224,3 @@ export default function Drawer(props: DrawerProps) {
     </>
   );
 }
-
-// Dummy
-const labelsDummy = [
-  {
-    id: 'label01',
-    name: 'Velog',
-    color: '#e7e7e7',
-  },
-  {
-    id: 'label02',
-    name: 'Test',
-    color: '#b6cff5',
-  },
-];

@@ -51,21 +51,11 @@ type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
 type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
 
 export default function MainHeader() {
-  const labels = useRecoilValue(getLabels);
-
   const [searchMailText, setSearchMailText] = useRecoilState(searchMailTextAtom);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchMailText(e.target.value.trim());
   };
 
-  const [labelAnchorEl, setLabelAnchorEl] = useState<HTMLSpanElement | null>(null);
-  const handleLabelIconClick = (e: MouseEvent<HTMLSpanElement>) => {
-    if (e.currentTarget instanceof HTMLSpanElement) setLabelAnchorEl(e.currentTarget);
-  };
-  const isLabelMenuOpen = Boolean(labelAnchorEl);
-  const handleLabelMenuClose = () => {
-    setLabelAnchorEl(null);
-  };
   const handleLabelClick = (labelId: string) => {
     setMailList(
       mailList.map(mail => {

@@ -16,7 +16,7 @@ import RowItem from '../../../Grid/RowItem';
 import OutlineStar from '../../../Icons/OutlineStar';
 import Star from '../../../Icons/Star';
 
-const BodyStyled = styled.section`
+const MainBodyStyled = styled.section`
   flex-grow: 1;
   width: 100%;
   max-height: calc(100% - 66px - 24px);
@@ -138,7 +138,7 @@ export default function MainBody() {
   };
 
   return (
-    <BodyStyled>
+    <MainBodyStyled>
       {filteredMailList.length === 0 && <EmptyContentsStyled>메일이 존재하지 않습니다.</EmptyContentsStyled>}
 
       <div>
@@ -180,6 +180,6 @@ export default function MainBody() {
             );
           })}
       </div>
-    </BodyStyled>
+    </MainBodyStyled>
   );
 }

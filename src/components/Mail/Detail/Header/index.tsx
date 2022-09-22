@@ -14,8 +14,9 @@ import MenuItem from '../../../Menu/MenuItem';
 import Checkbox from '../../../Forms/Checkbox';
 import Label from '../../../Icons/Label';
 import OutlineStar from '../../../Icons/OutlineStar';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const HeaderStyled = styled.header`
+const DetailHeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   width: 100%;
   box-sizing: border-box;
@@ -25,49 +26,56 @@ const HeaderStyled = styled.header`
   background-color: #ffffff;
   border-radius: 8px 8px 0 0;
   padding: 12px 8px;
-
-  .pagination-info {
-    color: #111827;
-    font-size: 12px;
-    padding: 0 6px;
-    letter-spacing: -0.5px;
-  }
-
-  .pagination-arrow {
-    display: flex;
-    align-items: center;
-  }
 `;
 
 type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
-type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
+type CheckedFlagType = 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
 
 const iconColor = { color: '#5f6368' };
 
 export default function DetailHeader() {
+  const { mailId } = useParams();
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
+  const handleSpamClick = () => {
+    // TODO : mail spam fetch
+  };
+
+  const handleDeleteClick = () => {
+    // TODO : mail delete fetch
+  };
+
+  const handleUnReadClick = () => {
+    // TODO : mail unread fetch
+  };
+
   return (
-    <HeaderStyled>
+    <DetailHeaderStyled>
       <Row alignItems="center" justifyContent="space-between" rowGap={1}>
         <RowItem>
           <Row alignItems="center">
             <RowItem>
-              <span className="icon-hover">
+              <span className="icon-hover" onClick={handleBackClick}>
                 <ArrowBackIcon sx={iconColor} />
               </span>
             </RowItem>
             <RowItem>
               <span className="icon-hover">
-                <InfoOutlinedIcon sx={iconColor} />
+                <InfoOutlinedIcon sx={iconColor} onClick={handleSpamClick} />
               </span>
             </RowItem>
             <RowItem>
               <span className="icon-hover">
-                <DeleteOutlineOutlinedIcon sx={iconColor} />
+                <DeleteOutlineOutlinedIcon sx={iconColor} onClick={handleDeleteClick} />
               </span>
             </RowItem>
             <RowItem>
               <span className="icon-hover">
-                <MarkAsUnreadOutlinedIcon sx={iconColor} />
+                <MarkAsUnreadOutlinedIcon sx={iconColor} onClick={handleUnReadClick} />
               </span>
             </RowItem>
             <RowItem>
@@ -83,6 +91,6 @@ export default function DetailHeader() {
           </Row>
         </RowItem>
       </Row>
-    </HeaderStyled>
+    </DetailHeaderStyled>
   );
 }

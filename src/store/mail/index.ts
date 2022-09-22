@@ -16,9 +16,12 @@ export const checkedMailAtom = atom<string[]>({
   default: [],
 });
 
-export const mailListFilterAtom = atom<MailFilterType>({
+export const mailListFilterAtom = atom<{ mailType: MailFilterType; labelId: string | null }>({
   key: 'MAIL_LIST_FILTER_ATOM',
-  default: 'inbox',
+  default: {
+    mailType: 'inbox',
+    labelId: null,
+  },
 });
 
 export const mailListAtom = atom<Mail[]>({
@@ -149,12 +152,14 @@ export const filteredMailListAtom = selector({
       return false;
     };
 
-    switch (filter) {
+    switch (filter.mailType) {
       case 'inbox':
         return mailList
           .filter(mail => {
             if (!mail.isSpam && !mail.isDelete) {
-              return true;
+              if (filter.labelId === null) return true;
+              if (filter.labelId !== null && filter.labelId === mail.labelId) return true;
+              return false;
             } else {
               return false;
             }
@@ -164,7 +169,9 @@ export const filteredMailListAtom = selector({
         return mailList
           .filter(mail => {
             if (mail.isStar) {
-              return true;
+              if (filter.labelId === null) return true;
+              if (filter.labelId !== null && filter.labelId === mail.labelId) return true;
+              return false;
             } else {
               return false;
             }
@@ -174,7 +181,9 @@ export const filteredMailListAtom = selector({
         return mailList
           .filter(mail => {
             if (mail.isStar && !mail.isDelete) {
-              return true;
+              if (filter.labelId === null) return true;
+              if (filter.labelId !== null && filter.labelId === mail.labelId) return true;
+              return false;
             } else {
               return false;
             }
@@ -184,7 +193,9 @@ export const filteredMailListAtom = selector({
         return mailList
           .filter(mail => {
             if (mail.isSpam && !mail.isDelete) {
-              return true;
+              if (filter.labelId === null) return true;
+              if (filter.labelId !== null && filter.labelId === mail.labelId) return true;
+              return false;
             } else {
               return false;
             }
@@ -194,7 +205,9 @@ export const filteredMailListAtom = selector({
         return mailList
           .filter(mail => {
             if (mail.isDelete) {
-              return true;
+              if (filter.labelId === null) return true;
+              if (filter.labelId !== null && filter.labelId === mail.labelId) return true;
+              return false;
             } else {
               return false;
             }
@@ -209,7 +222,7 @@ export const filteredMailLengthAtom = selector({
   get: ({ get }) => {
     const filter = get(mailListFilterAtom);
     const mailList = get(mailListAtom);
-    switch (filter) {
+    switch (filter.mailType) {
       case 'inbox':
         return mailList.filter(mail => {
           if (!mail.isSpam && !mail.isDelete) {

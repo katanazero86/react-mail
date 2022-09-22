@@ -98,7 +98,7 @@ export default function MainBody() {
   const [checkedMail, setCheckedMail] = useRecoilState(checkedMailAtom);
 
   useEffect(() => {
-    setMailListFilter(current => mailBox as MailFilterType);
+    setMailListFilter(current => ({ ...current, mailType: mailBox as MailFilterType }));
   }, [mailBox]);
 
   useEffect(() => {

@@ -5,14 +5,13 @@ import { mailListAtom } from '../../../../store/mail';
 import styled from '@emotion/styled';
 import RowItem from '../../../Grid/RowItem';
 import Row from '../../../Grid/Row';
-import Label from '../../../Icons/Label';
 import OutlineStar from '../../../Icons/OutlineStar';
 import Star from '../../../Icons/Star';
+import LabelMenu from '../../LabelMenu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
-import LabelMenu from '../../LabelMenu';
 
 const DetailHeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;

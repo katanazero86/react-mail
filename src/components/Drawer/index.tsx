@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef, MouseEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { checkedMailAtom, getLabels, labelsAtom } from '../../store/mail';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { checkedMailAtom, getLabels, labelsAtom, mailListFilterAtom } from '../../store/mail';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../Forms/Button';
@@ -62,9 +62,10 @@ const AnchorStyled = styled.a`
   font-weight: inherit;
 `;
 const LabelsStyled = styled.div`
-  padding: 12px;
+  padding: 0 12px 0 0;
 `;
 const LabelsHeaderStyled = styled.div`
+  padding: 0 12px;
   margin-top: 16px;
   display: flex;
   align-items: center;
@@ -74,14 +75,16 @@ const LabelsBodyStyled = styled.ul`
   padding: 12px 0;
   margin: 0;
 `;
-const LabelsItemStyled = styled.li`
+const LabelsItemStyled = styled.li<{ active?: boolean }>`
   list-style: none;
-  padding: 6px 0;
+  padding: 6px 12px;
   margin: 0;
   display: flex;
   align-items: center;
   cursor: pointer;
   border-radius: 0 30px 30px 0;
+  background-color: ${props => (props.active ? 'rgba(10, 143, 220, 0.1)' : 'transparent')};
+  font-weight: ${props => (props.active ? 500 : 400)};
   &:hover {
     background-color: rgba(10, 143, 220, 0.1);
   }
@@ -103,6 +106,7 @@ interface DrawerProps extends ComponentPropsWithoutRef<'nav'> {
 
 export default function Drawer(props: DrawerProps) {
   const navigate = useNavigate();
+  const [mailListFilter, setMailListFilter] = useRecoilState(mailListFilterAtom);
   const checkedMail = useSetRecoilState(checkedMailAtom);
   const { mailBox } = useParams();
   const { isOpen, handleClose, ...rest } = props;
@@ -118,6 +122,7 @@ export default function Drawer(props: DrawerProps) {
     e.stopPropagation();
     const { path } = e.currentTarget.dataset as { path: string };
     checkedMail([]);
+    setMailListFilter(current => ({ ...current, labelId: null }));
     navigate(`/mail/${path}`);
   };
 
@@ -163,6 +168,14 @@ export default function Drawer(props: DrawerProps) {
     }
   };
 
+  const handleLabelClick = (labelId: string) => {
+    if (mailListFilter.labelId === labelId) {
+      setMailListFilter(current => ({ ...current, labelId: null }));
+    } else {
+      setMailListFilter(current => ({ ...current, labelId: labelId }));
+    }
+  };
+
   return (
     <>
       <DrawerStyled {...rest} isOpen={isOpen} onClick={onClose}>
@@ -204,7 +217,11 @@ export default function Drawer(props: DrawerProps) {
             <LabelsBodyStyled>
               {labels.length > 0 &&
                 labels.map(label => (
-                  <LabelsItemStyled key={label.id}>
+                  <LabelsItemStyled
+                    key={label.id}
+                    active={mailListFilter.labelId === label.id}
+                    onClick={() => handleLabelClick(label.id)}
+                  >
                     <Label color={label.color} />
                     <LabelsItemText>{label.name}</LabelsItemText>
                   </LabelsItemStyled>

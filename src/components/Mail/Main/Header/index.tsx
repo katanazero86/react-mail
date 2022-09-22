@@ -264,14 +264,14 @@ export default function MainHeader() {
             </RowItem>
             <RowItem>
               <Row alignItems="center">
-                {checkedMail.length > 0 && mailListFilter === 'trash' && (
+                {checkedMail.length > 0 && mailListFilter.mailType === 'trash' && (
                   <RowItem>
                     <span className="icon-hover" onClick={handleDeleteClick}>
                       <DeleteOutlineIcon />
                     </span>
                   </RowItem>
                 )}
-                {checkedMail.length > 0 && mailListFilter !== 'trash' && (
+                {checkedMail.length > 0 && mailListFilter.mailType !== 'trash' && (
                   <RowItem>
                     <LabelMenu onClick={handleLabelClick} />
                   </RowItem>

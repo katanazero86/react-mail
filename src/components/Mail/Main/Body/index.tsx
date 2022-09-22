@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   allCheckedAtom,
@@ -53,6 +53,7 @@ const MailFromStyled = styled.span<{ isRead: boolean }>`
   color: #202124;
   letter-spacing: -0.5px;
   font-weight: ${props => (props.isRead ? 400 : 600)};
+  cursor: pointer;
 `;
 
 const MailDateStyled = styled.span`
@@ -71,6 +72,7 @@ const MailTitleStyled = styled.p<{ isRead: boolean }>`
   white-space: nowrap;
   padding-left: 30px;
   font-weight: ${props => (props.isRead ? 400 : 600)};
+  cursor: pointer;
 `;
 
 const MailContentsStyled = styled.p`
@@ -80,12 +82,14 @@ const MailContentsStyled = styled.p`
   padding-left: 30px;
   color: #5f6368;
   font-size: 14px;
+  cursor: pointer;
 `;
 
 export default function MainBody() {
+  const navigate = useNavigate();
   const { mailBox } = useParams();
   const filteredMailList = useRecoilValue(filteredMailListAtom);
-  const setMailListFilter = useSetRecoilState(mailListFilterAtom);
+  const [mailListFilter, setMailListFilter] = useRecoilState(mailListFilterAtom);
   const [mailList, setMailList] = useRecoilState(mailListAtom);
   const [allChecked, setAllChecked] = useRecoilState(allCheckedAtom);
   const [checkedMail, setCheckedMail] = useRecoilState(checkedMailAtom);
@@ -137,6 +141,10 @@ export default function MainBody() {
     );
   };
 
+  const handleMailClick = (targetMail: Mail) => {
+    navigate(`/mail/${mailListFilter}/${targetMail.id}`);
+  };
+
   return (
     <MainBodyStyled>
       {filteredMailList.length === 0 && <EmptyContentsStyled>메일이 존재하지 않습니다.</EmptyContentsStyled>}
@@ -159,7 +167,9 @@ export default function MainBody() {
                           {mail.isStar ? <Star color="red" /> : <OutlineStar />}
                         </span>
                       </MailStarWrapStyled>
-                      <MailFromStyled isRead={mail.isRead}>{mail.from}</MailFromStyled>
+                      <MailFromStyled isRead={mail.isRead} onClick={() => handleMailClick(mail)}>
+                        {mail.from}
+                      </MailFromStyled>
                     </Row>
                   </RowItem>
                   <RowItem>
@@ -168,12 +178,14 @@ export default function MainBody() {
                 </Row>
                 <Row alignItems="center">
                   <RowItem xs>
-                    <MailTitleStyled isRead={mail.isRead}>{mail.title}</MailTitleStyled>
+                    <MailTitleStyled isRead={mail.isRead} onClick={() => handleMailClick(mail)}>
+                      {mail.title}
+                    </MailTitleStyled>
                   </RowItem>
                 </Row>
                 <Row alignItems="center">
                   <RowItem xs>
-                    <MailContentsStyled>{mail.contents}</MailContentsStyled>
+                    <MailContentsStyled onClick={() => handleMailClick(mail)}>{mail.contents}</MailContentsStyled>
                   </RowItem>
                 </Row>
               </MailWrapStyled>

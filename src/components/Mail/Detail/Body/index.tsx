@@ -37,6 +37,8 @@ const MailTitleStyled = styled.h2`
 export default function DetailBody() {
   const { mailId } = useParams();
   const mailList = useRecoilValue(mailListAtom);
+
+  // TODO : targetMail fetch
   const targetMail = mailList.find(mail => String(mail.id) === mailId)!;
 
   return (

@@ -6,19 +6,19 @@ import {
   filteredMailLengthAtom,
   mailListAtom,
   mailListFilterAtom,
-} from '../../../store/mail/index';
+} from '../../../../store/mail';
 import styled from '@emotion/styled';
-import RowItem from '../../Grid/RowItem';
-import Input from '../../Forms/Input';
-import Row from '../../Grid/Row';
+import RowItem from '../../../Grid/RowItem';
+import Input from '../../../Forms/Input';
+import Row from '../../../Grid/Row';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import Menu from '../../Menu';
-import MenuItem from '../../Menu/MenuItem';
-import Checkbox from '../../Forms/Checkbox';
-import Label from '../../Icons/Label';
+import Menu from '../../../Menu';
+import MenuItem from '../../../Menu/MenuItem';
+import Checkbox from '../../../Forms/Checkbox';
+import Label from '../../../Icons/Label';
 
 const HeaderStyled = styled.header`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -47,7 +47,7 @@ const HeaderStyled = styled.header`
 type FlagType = 'ALL_READ' | 'ALL_UNREAD' | 'ALL_STAR' | 'ALL_UN_STAR';
 type CheckedFlagType = 'READ' | 'UNREAD' | 'STAR' | 'UN_STAR' | 'SPAM' | 'UN_SPAM' | 'DELETE';
 
-export default function Header() {
+export default function MainHeader() {
   const [searchMail, setSearchMail] = useState('');
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchMail(e.target.value.trim());

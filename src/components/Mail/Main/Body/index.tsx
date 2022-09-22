@@ -7,14 +7,14 @@ import {
   filteredMailListAtom,
   mailListAtom,
   mailListFilterAtom,
-} from '../../../store/mail';
-import { Mail, MailFilterType } from '../../../store/mail/types';
+} from '../../../../store/mail';
+import { Mail, MailFilterType } from '../../../../store/mail/types';
 import styled from '@emotion/styled';
-import Checkbox from '../../Forms/Checkbox';
-import Row from '../../Grid/Row';
-import RowItem from '../../Grid/RowItem';
-import OutlineStar from '../../Icons/OutlineStar';
-import Star from '../../Icons/Star';
+import Checkbox from '../../../Forms/Checkbox';
+import Row from '../../../Grid/Row';
+import RowItem from '../../../Grid/RowItem';
+import OutlineStar from '../../../Icons/OutlineStar';
+import Star from '../../../Icons/Star';
 
 const BodyStyled = styled.section`
   flex-grow: 1;
@@ -82,7 +82,7 @@ const MailContentsStyled = styled.p`
   font-size: 14px;
 `;
 
-export default function Body() {
+export default function MainBody() {
   const { mailBox } = useParams();
   const filteredMailList = useRecoilValue(filteredMailListAtom);
   const setMailListFilter = useSetRecoilState(mailListFilterAtom);

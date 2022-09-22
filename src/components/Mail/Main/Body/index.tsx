@@ -100,18 +100,18 @@ export default function MainBody() {
 
   useEffect(() => {
     if (allChecked) {
-      if (checkedMail.length !== mailList.length) {
-        setCheckedMail(mailList.map(mail => String(mail.id)));
+      if (checkedMail.length !== filteredMailList.length) {
+        setCheckedMail(filteredMailList.map(mail => String(mail.id)));
       }
     } else {
-      if (checkedMail.length === mailList.length) {
+      if (checkedMail.length === filteredMailList.length) {
         setCheckedMail([]);
       }
     }
   }, [allChecked]);
 
   useEffect(() => {
-    if (checkedMail.length === mailList.length) {
+    if (checkedMail.length === filteredMailList.length) {
       setAllChecked(true);
     } else {
       setAllChecked(false);

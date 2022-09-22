@@ -18,11 +18,28 @@ import Button from '../../Forms/Button';
 interface ComposeMailModalProps {
   isOpen: boolean;
   onClose(): void;
+  isReply?: boolean;
+  isRelay?: boolean;
+  replyAddress?: string;
 }
 
-export default function ComposeMailModal({ isOpen, onClose }: ComposeMailModalProps) {
+export default function ComposeMailModal({
+  isOpen,
+  onClose,
+  isReply = false,
+  isRelay = false,
+  replyAddress = '',
+}: ComposeMailModalProps) {
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      setMailForm({
+        recipient: replyAddress,
+        cc: '',
+        bcc: '',
+        title: '',
+        contents: '',
+      });
+    } else {
       setMailForm({
         recipient: '',
         cc: '',
@@ -138,7 +155,11 @@ export default function ComposeMailModal({ isOpen, onClose }: ComposeMailModalPr
         <ModalOverlayStyled onClick={handleOverlayClick}>
           <ModalWrapStyled>
             <ModalHeaderStyled>
-              <ModalHeaderTitle>새 메일 작성</ModalHeaderTitle>
+              <ModalHeaderTitle>
+                {isReply && '답장하기'}
+                {isRelay && '전달하기'}
+                {!isReply && !isRelay && '새 메일 작성'}
+              </ModalHeaderTitle>
               <span className="icon-hover" onClick={handleCloseClick}>
                 <Close />
               </span>

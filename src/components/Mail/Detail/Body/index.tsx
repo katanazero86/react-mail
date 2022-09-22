@@ -57,6 +57,13 @@ const MailFromAndToWrapStyled = styled.div`
   margin-right: -8px;
 `;
 
+const MailContents = styled.div`
+  padding: 20px;
+  word-break: break-all;
+  font-size: 14px;
+  white-space: pre-line;
+`;
+
 export default function DetailBody() {
   const { mailId } = useParams();
   const mailList = useRecoilValue(mailListAtom);
@@ -89,6 +96,7 @@ export default function DetailBody() {
             </RowItem>
           </Row>
         </MailFromAndToWrapStyled>
+        <MailContents dangerouslySetInnerHTML={{ __html: targetMail.contents }} />
       </div>
     </DetailBodyStyled>
   );

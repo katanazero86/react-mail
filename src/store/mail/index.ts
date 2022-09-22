@@ -24,7 +24,7 @@ export const mailListAtom = atom<Mail[]>({
       from: 'The Postman Team',
       fromAddress: 'marketing@postman.com',
       title: 'Postman v10 is here!',
-      contents: "It's Postman's biggest update in almost a year. Here's what's new:",
+      contents: `It's Postman's biggest update in almost a year. Here's what's new:`,
       labelId: null,
       date: '2022.09.16',
       isRead: false,
@@ -37,7 +37,7 @@ export const mailListAtom = atom<Mail[]>({
       from: 'Medium Daily Digest',
       fromAddress: 'noreply@medium.com',
       title: 'Postman v10 is here!',
-      contents: "It's Postman's biggest update in almost a year. Here's what's new:",
+      contents: `It's Postman's biggest update in almost a year. Here's what's new:`,
       labelId: null,
       date: '2022.09.16',
       isRead: false,
@@ -50,7 +50,7 @@ export const mailListAtom = atom<Mail[]>({
       from: 'Velog',
       fromAddress: 'notify@velog.io',
       title: 'Re: React 에서 볼 수 있는 클로저(Closure) | 댓글 알림',
-      contents: "It's Postman's biggest update in almost a year. Here's what's new:",
+      contents: `It's Postman's biggest update in almost a year. Here's what's new:`,
       labelId: null,
       date: '2022.09.16',
       isRead: false,
@@ -63,7 +63,7 @@ export const mailListAtom = atom<Mail[]>({
       from: 'Medium Daily Digest',
       fromAddress: 'noreply@medium.com',
       title: 'Postman v10 is here!',
-      contents: "It's Postman's biggest update in almost a year. Here's what's new:",
+      contents: `It's Postman's biggest update in almost a year. Here's what's new:`,
       labelId: null,
       date: '2022.09.03',
       isRead: false,
@@ -76,7 +76,7 @@ export const mailListAtom = atom<Mail[]>({
       from: 'Medium Daily Digest',
       fromAddress: 'noreply@medium.com',
       title: 'Tailwind is an Anti-Pattern | Enrico Gruner in JavaScript in Plain English',
-      contents: 'Tailwind is an Anti-Pattern | Enrico Gruner in JavaScript in Plain English',
+      contents: `Tailwind is an Anti-Pattern | Enrico Gruner in JavaScript in Plain English`,
       labelId: null,
       date: '2022.09.01',
       isRead: false,
@@ -89,7 +89,22 @@ export const mailListAtom = atom<Mail[]>({
       from: 'Github',
       fromAddress: 'no-reply@github.com',
       title: "The evolution of the command line and more stories from GitHub's The ReadME Project",
-      contents: '깃헙에서 뭔가 메일이 왔어요 블라블라블라',
+      contents: `Hey zero86 👋
+
+It's time for another major remote conference. Join us on December 8-9 at GraphQL Galaxy, and get to e-meet GraphQL industry experts and people behind your favorite projects.
+
+You can tune in from anywhere in the world to explore the future of the ecosystem. You'll learn about all things GQL with stellar speakers like Benjie (Graphile), Vishwa Mehta (The Graph), Charly Poly (The Guild), and many others.
+
+View lineup
+
+Use the unique opportunity – we've recently launched the discounted Early Bird tickets, allowing you to get full access for just €46.
+
+In case you'd also like to attend 11 other JS events and access 170+ hours of JS talks and workshops, we highly recommend getting a GitNation Multipass for €17/month.
+
+If you have any questions, feel free to respond to this email and we'll get back to you shortly.
+
+Best,
+Anna / GraphQL Galaxy`,
       labelId: null,
       date: '2022.08.30',
       isRead: true,

@@ -149,7 +149,7 @@ export default function MainBody() {
   };
 
   const handleMailClick = (targetMail: Mail) => {
-    navigate(`/mail/${mailListFilter}/${targetMail.id}`);
+    navigate(`/mail/${mailListFilter.mailType}/${targetMail.id}`);
   };
 
   return (

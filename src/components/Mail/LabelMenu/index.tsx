@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { Fragment, MouseEvent, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { getLabels } from '../../../store/mail';
 import Label from '../../Icons/Label';
@@ -34,9 +34,9 @@ export default function LabelMenu({ color, onClick }: LabelMenuProps) {
       <Menu isOpen={isLabelMenuOpen} anchorEl={labelAnchorEl} onClose={handleLabelMenuClose}>
         {labels.length > 0 &&
           labels.map(label => (
-            <>
+            <Fragment key={label.id}>
               <MenuItem onClick={() => handleMenuClick(label.id)}>{label.name}</MenuItem>
-            </>
+            </Fragment>
           ))}
       </Menu>
     </>

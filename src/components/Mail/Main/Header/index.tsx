@@ -4,7 +4,6 @@ import {
   allCheckedAtom,
   checkedMailAtom,
   filteredMailLengthAtom,
-  getLabels,
   mailListAtom,
   mailListFilterAtom,
   searchMailTextAtom,
@@ -20,7 +19,6 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Menu from '../../../Menu';
 import MenuItem from '../../../Menu/MenuItem';
 import Checkbox from '../../../Forms/Checkbox';
-import Label from '../../../Icons/Label';
 import LabelMenu from '../../LabelMenu';
 
 const HeaderStyled = styled.header`

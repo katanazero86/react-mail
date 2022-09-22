@@ -147,6 +147,9 @@ export default function ComposeMailModal({
       alert('내용를 입력해주세요.');
       return false;
     }
+
+    // TODO : send mail
+    onClose();
   };
 
   return (
